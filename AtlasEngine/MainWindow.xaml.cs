@@ -20,10 +20,25 @@ namespace AtlasEngine
     /// </summary>
     public partial class MainWindow : Window
     {
+        SpriteSheet mSheet;
         public MainWindow()
         {
             InitializeComponent();
             SpriteSheet sheet = new SpriteSheet(canvasControl, "", 512, 256, false);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            CreateNewSheet();
+        }
+
+        private void CreateNewSheet()
+        {
+            LoadSheetDialog dialog = new LoadSheetDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                MessageBox.Show("Width: " + dialog.Width + "\nHeight: " + dialog.Height);
+            }
         }
 
         private void HandleMenuFileSelectClick(object sender, RoutedEventArgs e)

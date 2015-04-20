@@ -54,7 +54,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LoadSheetDialog.xaml.cs">
+      <DependentUpon>LoadSheetDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SpriteSheet.cs" />
+    <Page Include="LoadSheetDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
