@@ -10,6 +10,7 @@ namespace AtlasEngine
         public LoadSheetDialog()
         {
             InitializeComponent();
+            width.Focus();
         }
 
         public string Width
@@ -29,5 +30,7 @@ namespace AtlasEngine
         {
             DialogResult = true;
         }
+
+
     }
 }

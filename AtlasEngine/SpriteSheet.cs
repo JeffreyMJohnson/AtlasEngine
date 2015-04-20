@@ -29,6 +29,10 @@ namespace AtlasEngine
             }
         }
 
+        public void Save(string filePath)
+        {
+            Console.WriteLine("save " + filePath);
+        }
 
         public double Height
         {

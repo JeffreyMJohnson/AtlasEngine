@@ -14,7 +14,10 @@
         </Grid.RowDefinitions>
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="1024" Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="_Select Image Files" Click="HandleMenuFileSelectClick" ToolTip="Select sprite image files to add to sheet."/>
+                <MenuItem Header="_New Sprite Sheet" Click="HandleNewSpriteSheetClick"/>
+                <MenuItem Header="_Save Sprite Sheet" Click="HandleSaveSheetClick"/>
+                <MenuItem Header="_Load Sprite(s)" Click="HandleMenuFileSelectClick" ToolTip="Select sprite image files to add to sheet."/>
+                <MenuItem Header="E_xit Program" Click="HandleMenuExitClick" />
             </MenuItem>
         </Menu>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
