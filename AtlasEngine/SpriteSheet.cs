@@ -47,7 +47,6 @@ namespace AtlasEngine
         {
             mBasePath = basePath;
             mIsNormalized = normalize;
-            InitAtlasDoc();
             mCanvasControl = canvas;
             Width = width;
             Height = height;
@@ -55,27 +54,19 @@ namespace AtlasEngine
 
         public void Save(string filePath)
         {
-            double totalWidth = 0;
-            double totalHeight = 0;
-
-                //foreach (var img in mSpritesList)
-                //{
-                //    if (img.Left + img.Width > totalWidth)
-                //        totalWidth = img.Left + img.Width;
-                //    if (img.Top + img.Height > totalHeight)
-                //        totalHeight = img.Top + img.Height;
-                //}
-
-            totalWidth = Width;
-            totalHeight = Height;
-
-            WriteableBitmap finalImage = BitmapFactory.New((int)totalWidth, (int)totalHeight);
+            //build image file name
+            int whackIndex = filePath.LastIndexOf('\\');
+            int dotIndex = filePath.LastIndexOf('.');
+            string imageFilepath = filePath.Substring(whackIndex + 1, dotIndex - (whackIndex + 1)) + ".png";
+            //create atlas file
+            InitAtlasDoc(imageFilepath);
+            WriteChildrenToAtlasFile();
+            WriteableBitmap finalImage = BitmapFactory.New((int)Width, (int)Height);
 
             foreach (Image2 img in mSpritesList)
             {
                 System.Windows.Rect imageRect = new System.Windows.Rect(img.Left, img.Top, img.Width, img.Height);
                 WriteableBitmap wBmp = new WriteableBitmap(BitmapFactory.ConvertToPbgra32Format(img.mBMP));
-                /*Use the BitmapFactory.ConvertToPbgra32Format method to automatically convert any input BitmapSource to the right format accepted by this class.*/
                 finalImage.Blit(imageRect, wBmp , new System.Windows.Rect(0, 0, wBmp.PixelWidth, wBmp.PixelHeight));
             }
 
@@ -96,40 +87,38 @@ namespace AtlasEngine
                 if(fStream != null)
                 fStream.Close();
             }
+        }
 
-
-            /*
-            //save current canvas transform
-
-            Transform transform = mCanvasControl.LayoutTransform;
-            mCanvasControl.LayoutTransform = null;
-            System.Windows.Size size = new System.Windows.Size(mCanvasControl.Width, mCanvasControl.Height);
-
-
-            mCanvasControl.Measure(size);
-            mCanvasControl.Arrange(new System.Windows.Rect(size));
-
-            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
-                (int)size.Width,
-                (int)size.Height,
-                96d,
-                96d,
-                PixelFormats.Pbgra32);
-
-            //create file stream for saving image
-            using (FileStream outStream = new FileStream(filePath, FileMode.Create))
+        void WriteChildrenToAtlasFile()
+        {
+            XmlNode groupNode = mRootNode.FirstChild;
+            for (int i = 0; i < mSpritesList.Count(); i++)
             {
-                //use .png encoder for data
-                PngBitmapEncoder encoder = new PngBitmapEncoder();
-                //push the rendered bitmap to it
-                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-                //save data to stream
-                encoder.Save(outStream);
-            }
+                Image2 img = mSpritesList[i];
+                XmlElement spriteNode = mAtlasDoc.CreateElement("sprite");
+                XmlAttribute att = mAtlasDoc.CreateAttribute("id");
+                att.Value = i.ToString();
+                spriteNode.SetAttributeNode(att);
 
-            //restore previously saved layout
-            mCanvasControl.LayoutTransform = transform;
-            */
+                att = mAtlasDoc.CreateAttribute("x");
+                att.Value = ((int)img.Left).ToString();
+                spriteNode.SetAttributeNode(att);
+
+                att = mAtlasDoc.CreateAttribute("y");
+                att.Value = ((int)img.Top).ToString();
+                spriteNode.SetAttributeNode(att);
+
+                att = mAtlasDoc.CreateAttribute("width");
+                att.Value = ((int)img.Width).ToString();
+                spriteNode.SetAttributeNode(att);
+
+                att = mAtlasDoc.CreateAttribute("height");
+                att.Value = ((int)img.Height).ToString();
+                spriteNode.SetAttributeNode(att);
+
+                groupNode.AppendChild(spriteNode);
+                
+            }
         }
 
 
@@ -197,12 +186,12 @@ namespace AtlasEngine
             return result;
         }
 
-        private void InitAtlasDoc()
+        private void InitAtlasDoc(string filePath)
         {
             mRootNode = mAtlasDoc.CreateElement("SpriteSheet");
             mAtlasDoc.AppendChild(mRootNode);
             XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
-            att.Value = mBasePath;
+            att.Value = filePath;
             mRootNode.SetAttributeNode(att);
 
             att = mAtlasDoc.CreateAttribute("width");
