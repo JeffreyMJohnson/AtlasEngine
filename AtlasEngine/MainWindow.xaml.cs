@@ -27,6 +27,8 @@ namespace AtlasEngine
         {
             InitializeComponent();
             //SpriteSheet sheet = new SpriteSheet(canvasControl, "", 512, 256, false);
+
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -56,7 +58,9 @@ namespace AtlasEngine
             LoadSheetDialog dialog = new LoadSheetDialog();
             if (dialog.ShowDialog() == true)
             {
-                double width, height;
+                double width = 0;
+                double height = 0;
+                canvasControl.Children.Clear();
                 if(Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
                 {
                     mSheet = new SpriteSheet(canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
@@ -111,6 +115,13 @@ namespace AtlasEngine
         private void HandleMenuExitClick(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        
+
+        private void UpdateImageDisplay()
+        {
+            int pixelWidth, pixelHeight;
+
         }
     }
 }

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Atlas Engine" Height="768" Width="1024"
         Loaded="Window_Loaded">
-    <Grid>
+    <Grid x:Name="gridMain">
         <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -12,7 +12,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="1024" Grid.Row="0">
+        <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding ElementName=gridMain, Path=ActualWidth}" Grid.Row="0">
             <MenuItem Header="_File">
                 <MenuItem Header="_New Sprite Sheet" Click="HandleNewSpriteSheetClick"/>
                 <MenuItem Header="_Save Sprite Sheet" Click="HandleSaveSheetClick"/>

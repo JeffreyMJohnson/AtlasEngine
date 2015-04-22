@@ -10,7 +10,7 @@ namespace AtlasEngine
     class Image2
     {
         string mFilePath;
-        BitmapImage mBMP;//the actual image in memory
+        public BitmapImage mBMP;//the actual image in memory
         Image mControl;//the image control to be placed on a canvas
         ImageHighlight mHighlightRec;
         bool mIsHighlighted = false;
