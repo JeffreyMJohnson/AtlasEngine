@@ -160,9 +160,9 @@ namespace AtlasEngine
         }
 
 
-        public void AddSprite(string relativePath)
+        public void AddSprite(string path)
         {
-            Image2 img = new Image2(mBasePath + relativePath);
+            Image2 img = new Image2(path);
             GetNextImagePosition(img);
             mCanvasControl.Children.Add(img.ImageControl);
 

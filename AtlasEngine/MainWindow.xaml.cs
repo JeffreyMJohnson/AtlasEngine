@@ -26,9 +26,6 @@ namespace AtlasEngine
         public MainWindow()
         {
             InitializeComponent();
-            //SpriteSheet sheet = new SpriteSheet(canvasControl, "", 512, 256, false);
-
-
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -45,14 +42,16 @@ namespace AtlasEngine
             mSheet = new SpriteSheet(canvasControl, basePath, 256, 256, false);
             for (int i = 0; i < 10; i++)
             {
-                mSheet.AddSprite(@"test_images\med\green_square_med.png");
+                mSheet.AddSprite(basePath + @"test_images\med\green_square_med.png");
             }
 
             for (int i = 0; i < 10; i++)
             {
-                mSheet.AddSprite(@"test_images\small\eight_ball_small.png");
+                mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
             }
         }
+
+
         private void CreateNewSheet()
         {
             LoadSheetDialog dialog = new LoadSheetDialog();
@@ -81,12 +80,10 @@ namespace AtlasEngine
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 string[] fileNames = dialog.FileNames;
-                string text = "";
 
                 for (int i = 0; i < fileNames.Length; i++)
                 {
-                    text += fileNames[i] + "\n";
-                    Console.WriteLine(fileNames[i]);
+                    mSheet.AddSprite(fileNames[i]);
                 }
                 
             }
