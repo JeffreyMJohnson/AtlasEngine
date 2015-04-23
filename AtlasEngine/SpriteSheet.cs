@@ -55,23 +55,61 @@ namespace AtlasEngine
         public void Save(string filePath)
         {
             //build image file name
+            string file = "";
+            string path = "";
+            ParseFilePath(filePath, out  path, out file);
+
+            SaveImageFile(path + XmlToPngFile(file));
+            SaveAtlasFile(path, file);
+
+
+        }
+
+        
+        string XmlToPngFile(string file)
+        {
+            int dotIndex = file.LastIndexOf('.');
+            //substring file without extension and concatenate .png to it.
+            return file.Substring(0, dotIndex) + ".png";
+            
+        }
+
+        void ParseFilePath(string filePath, out string path, out string file)
+        {
             int whackIndex = filePath.LastIndexOf('\\');
-            int dotIndex = filePath.LastIndexOf('.');
-            string imageFilepath = filePath.Substring(whackIndex + 1, dotIndex - (whackIndex + 1)) + ".png";
+            path = filePath.Substring(0, whackIndex + 1);
+            file = filePath.Substring(whackIndex + 1, filePath.Length - (whackIndex + 1));
+        }
+
+
+        void SaveAtlasFile(string path, string file)
+        {
             //create atlas file
-            InitAtlasDoc(imageFilepath);
-            WriteChildrenToAtlasFile();
+            InitAtlasDoc(XmlToPngFile(file));
+            WriteChildrenToAtlasDocument();
+
+            //save atlas file
+            mAtlasDoc.Save(path + file);
+        }
+
+        void SaveImageFile(string filePath)
+        {
+            //create bitmap to hold sprites
             WriteableBitmap finalImage = BitmapFactory.New((int)Width, (int)Height);
 
+            //add the sprites to the bitmap
             foreach (Image2 img in mSpritesList)
             {
                 System.Windows.Rect imageRect = new System.Windows.Rect(img.Left, img.Top, img.Width, img.Height);
                 WriteableBitmap wBmp = new WriteableBitmap(BitmapFactory.ConvertToPbgra32Format(img.mBMP));
-                finalImage.Blit(imageRect, wBmp , new System.Windows.Rect(0, 0, wBmp.PixelWidth, wBmp.PixelHeight));
+                finalImage.Blit(imageRect, wBmp, new System.Windows.Rect(0, 0, wBmp.PixelWidth, wBmp.PixelHeight));
             }
 
+            //saving in png format
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(finalImage));
+
+            //save the file
             FileStream fStream = null;
             try
             {
@@ -84,12 +122,12 @@ namespace AtlasEngine
             }
             finally
             {
-                if(fStream != null)
-                fStream.Close();
+                if (fStream != null)
+                    fStream.Close();
             }
         }
 
-        void WriteChildrenToAtlasFile()
+        void WriteChildrenToAtlasDocument()
         {
             XmlNode groupNode = mRootNode.FirstChild;
             for (int i = 0; i < mSpritesList.Count(); i++)
@@ -117,7 +155,7 @@ namespace AtlasEngine
                 spriteNode.SetAttributeNode(att);
 
                 groupNode.AppendChild(spriteNode);
-                
+
             }
         }
 
@@ -155,7 +193,7 @@ namespace AtlasEngine
 
         public void Clear()
         {
-            
+
         }
 
         void GetNextImagePosition(Image2 newImage)
@@ -188,6 +226,8 @@ namespace AtlasEngine
 
         private void InitAtlasDoc(string filePath)
         {
+
+
             mRootNode = mAtlasDoc.CreateElement("SpriteSheet");
             mAtlasDoc.AppendChild(mRootNode);
             XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
