@@ -5,9 +5,22 @@
         Title="Atlas Engine" Height="768" Width="1024"
         Loaded="Window_Loaded"
         x:Name="window">
-    <!--<Window.Resources>
-        <ObjectDataProvider x:Key="SpritesheetProvider" ObjectType="{x:Type local:SpriteSheet}" x:Name="mSheet"/>
-    </Window.Resources>-->
+    <Window.Resources>
+        <XmlDataProvider x:Key="xmlData" Source="C:\Users\Jeff\Documents\GitHub\AtlasEngine\AtlasEngine\bin\Debug\foo.xml" XPath="/SpriteSheet/group" />
+        
+        <HierarchicalDataTemplate DataType="sprite" x:Key="sprite" >
+            <StackPanel Orientation="Horizontal">
+                <Label Content="ID:"/>
+                <TextBlock Text="{Binding XPath=@id}" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="group" ItemsSource="{Binding XPath=./*}">
+            <TextBlock Text="group"/>
+        </HierarchicalDataTemplate>
+
+    </Window.Resources>
     <Grid x:Name="gridMain">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".5*"/>
@@ -32,7 +45,9 @@
                     <RowDefinition Height=".5*"/>
                 </Grid.RowDefinitions>
                 <ScrollViewer Name="treeviewScrollWindow" Grid.Column="0" Grid.Row="0" VerticalScrollBarVisibility="Auto" >
-                    <TreeView Name="groupsTree"/>
+                    <TreeView Name="groupsTree" DataContext="{StaticResource xmlData}" ItemsSource="{Binding}" />
+
+
                 </ScrollViewer>
                 <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -53,7 +68,7 @@
         </Border>
 
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="1" >
-            <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#0f00ff00">
+            <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#0f00ff00" Name="canvasScrollviewer">
                 <Canvas x:Name="canvasControl" Background="Beige"/>
             </ScrollViewer>
         </Border>

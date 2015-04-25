@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 
 
 namespace AtlasEngine
@@ -24,10 +25,6 @@ namespace AtlasEngine
         //TODO: REMOVE FOR RELEASE
         string basePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\resources\";
         SpriteSheet mSheet;
-        
-
-
-
 
         public MainWindow()
         {
@@ -38,6 +35,8 @@ namespace AtlasEngine
         {
             TestIt();
             settingsPanel.DataContext = mSheet;
+            XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
+            root.Document = mSheet.AtlasDoc;
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace AtlasEngine
         /// </summary>
         void TestIt()
         {
-            mSheet = new SpriteSheet(canvasControl, basePath, 256, 256, false);
+            mSheet = new SpriteSheet(this, canvasControl, basePath, 256, 256, false);
             for (int i = 0; i < 10; i++)
             {
                 mSheet.AddSprite(basePath + @"test_images\med\green_square_med.png");
@@ -55,6 +54,7 @@ namespace AtlasEngine
             {
                 mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
             }
+
         }
 
 
@@ -73,7 +73,7 @@ namespace AtlasEngine
                         canvasControl.Children.Clear();
                         if (Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
                         {
-                            mSheet = new SpriteSheet(canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
+                            mSheet = new SpriteSheet(this, canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
                             settingsPanel.DataContext = mSheet;
                         }
                     }
