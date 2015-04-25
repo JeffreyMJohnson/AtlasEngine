@@ -8,19 +8,31 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using System.IO;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace AtlasEngine
 {
-    class SpriteSheet
+    public class SpriteSheet : INotifyPropertyChanged
     {
         List<Image2> mSpritesList = new List<Image2>();
-        string mBasePath;
-        bool mIsNormalized;
-        double mWidth, mHeight;
-        Canvas mCanvasControl;
+        string mBasePath = "";
+        bool mIsNormalized = false;
+        double mWidth = 0;
+        double mHeight = 0;
+        Canvas mCanvasControl = null;
         XmlDocument mAtlasDoc = new XmlDocument();
-        XmlElement mRootNode;
+        XmlElement mRootNode = null;
         //XmlElement mGroupsNode;
+
+        public string Foo
+        {
+            get { return "Foo"; }
+            set
+            {
+                OnPropertyChanged("Foo");
+            }
+        }
 
         public double Width
         {
@@ -29,6 +41,7 @@ namespace AtlasEngine
             {
                 mWidth = value;
                 mCanvasControl.Width = value;
+                OnPropertyChanged("Width");
             }
         }
 
@@ -39,6 +52,7 @@ namespace AtlasEngine
             {
                 mHeight = value;
                 mCanvasControl.Height = value;
+                OnPropertyChanged("Height");
             }
         }
 
@@ -51,6 +65,15 @@ namespace AtlasEngine
             Width = width;
             Height = height;
         }
+
+        //public void Init(Canvas canvas, string basePath, double width, double height, bool normalize)
+        //{
+        //    mBasePath = basePath;
+        //    mIsNormalized = normalize;
+        //    mCanvasControl = canvas;
+        //    Width = width;
+        //    Height = height;
+        //}
 
         public void Save(string filePath)
         {
@@ -260,6 +283,17 @@ namespace AtlasEngine
             XmlElement groupNode = mAtlasDoc.CreateElement("group"); ;
             // groupNode.SetAttribute("name", "group0");
             mRootNode.AppendChild(groupNode);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(info));
+            }
         }
     }
 }

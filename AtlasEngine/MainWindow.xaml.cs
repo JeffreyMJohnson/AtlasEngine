@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace AtlasEngine
 {
     /// <summary>
@@ -23,6 +24,8 @@ namespace AtlasEngine
         //TODO: REMOVE FOR RELEASE
         string basePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\resources\";
         SpriteSheet mSheet;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,7 +34,9 @@ namespace AtlasEngine
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //CreateNewSheet();
+
             TestIt();
+            settingsPanel.DataContext = mSheet;
         }
 
         /// <summary>
@@ -60,9 +65,9 @@ namespace AtlasEngine
                 double width = 0;
                 double height = 0;
                 canvasControl.Children.Clear();
-                if(Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
+                if (Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
                 {
-                    mSheet = new SpriteSheet(canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
+                    // mSheet = new SpriteSheet(canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
                 }
             }
         }
@@ -85,7 +90,7 @@ namespace AtlasEngine
                 {
                     mSheet.AddSprite(fileNames[i]);
                 }
-                
+
             }
         }
 
@@ -113,7 +118,7 @@ namespace AtlasEngine
         {
             this.Close();
         }
-        
+
 
         private void UpdateImageDisplay()
         {
