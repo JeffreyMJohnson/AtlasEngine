@@ -6,14 +6,13 @@
         Loaded="Window_Loaded"
         x:Name="window">
     <Window.Resources>
-        <XmlDataProvider x:Key="xmlData" Source="C:\Users\Jeff\Documents\GitHub\AtlasEngine\AtlasEngine\bin\Debug\foo.xml" XPath="/SpriteSheet/group" />
-        
-        <HierarchicalDataTemplate DataType="sprite" x:Key="sprite" >
+        <XmlDataProvider x:Key="xmlData" XPath="/SpriteSheet/group" />
+
+        <HierarchicalDataTemplate DataType="sprite" x:Key="sprite">
             <StackPanel Orientation="Horizontal">
                 <Label Content="ID:"/>
                 <TextBlock Text="{Binding XPath=@id}" VerticalAlignment="Center"/>
             </StackPanel>
-            
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="group" ItemsSource="{Binding XPath=./*}">

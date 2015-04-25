@@ -15,6 +15,10 @@ namespace AtlasEngine
 {
     public class SpriteSheet : INotifyPropertyChanged
     {
+        //MAGIC NUMBERS
+        const int DEFAULT_IMAGE_WIDTH = 256;
+        const int DEFAULT_IMAGE_HEIGHT = 256;
+
         List<Image2> mSpritesList = new List<Image2>();
         string mBasePath = "";
         bool mIsNormalized = false;
@@ -39,7 +43,7 @@ namespace AtlasEngine
             {
                 mHasChanged = value;
                 OnPropertyChanged("HasChanged");
-                if(mWindow != null)
+                if (mWindow != null)
                 {
                     if (mHasChanged)
                     {
@@ -95,18 +99,26 @@ namespace AtlasEngine
             ParseFilePath(filePath, out  path, out file);
 
             SaveImageFile(path + XmlToPngFile(file));
+            SetAtlasFileAttribute(XmlToPngFile(file));
             SaveAtlasFile(path, file);
             HasChanged = false;
 
         }
 
-        
+        void SetAtlasFileAttribute(string file)
+        {
+            //set filepath attribute on atlas file
+            XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
+            att.Value = file;
+            mRootNode.SetAttributeNode(att);
+        }
+
+
         string XmlToPngFile(string file)
         {
             int dotIndex = file.LastIndexOf('.');
             //substring file without extension and concatenate .png to it.
             return file.Substring(0, dotIndex) + ".png";
-            
         }
 
         void ParseFilePath(string filePath, out string path, out string file)
@@ -125,6 +137,7 @@ namespace AtlasEngine
 
         void SaveImageFile(string filePath)
         {
+
             //create bitmap to hold sprites
             WriteableBitmap finalImage = BitmapFactory.New((int)Width, (int)Height);
 
@@ -165,7 +178,7 @@ namespace AtlasEngine
             GetNextImagePosition(img);
             mCanvasControl.Children.Add(img.ImageControl);
             HasChanged = true;
- 
+
             mSpritesList.Add(img);
 
             //build xml
@@ -191,13 +204,21 @@ namespace AtlasEngine
             spriteNode.SetAttributeNode(att);
 
             //append to group node
-           mRootNode.FirstChild.AppendChild(spriteNode);
+            mRootNode.FirstChild.AppendChild(spriteNode);
 
-           
+
         }
 
         public void Clear()
         {
+
+            mCanvasControl.Children.RemoveRange(0, mCanvasControl.Children.Count);
+            Width = DEFAULT_IMAGE_WIDTH;
+            Height = DEFAULT_IMAGE_HEIGHT;
+            mSpritesList.Clear();
+            mAtlasDoc.RemoveAll();
+            HasChanged = false;
+            InitAtlasDoc();
 
         }
 
@@ -234,10 +255,7 @@ namespace AtlasEngine
 
 
             mRootNode = mAtlasDoc.CreateElement("SpriteSheet");
-            //mAtlasDoc.AppendChild(mRootNode);
-            //XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
-            //att.Value = filePath;
-            //mRootNode.SetAttributeNode(att);
+
 
             XmlAttribute att = mAtlasDoc.CreateAttribute("width");
             att.Value = Width.ToString();

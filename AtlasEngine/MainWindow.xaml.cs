@@ -1,18 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
 
 
 namespace AtlasEngine
@@ -37,6 +25,7 @@ namespace AtlasEngine
             settingsPanel.DataContext = mSheet;
             XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
             root.Document = mSheet.AtlasDoc;
+            
         }
 
         /// <summary>
@@ -65,18 +54,19 @@ namespace AtlasEngine
 
                 if (MessageBox.Show("Your sheet has changed since your last save, you will lose this work.", "Are You Sure?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    LoadSheetDialog dialog = new LoadSheetDialog();
-                    if (dialog.ShowDialog() == true)
-                    {
-                        double width = 0;
-                        double height = 0;
-                        canvasControl.Children.Clear();
-                        if (Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
-                        {
-                            mSheet = new SpriteSheet(this, canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
-                            settingsPanel.DataContext = mSheet;
-                        }
-                    }
+                    mSheet.Clear();
+                    //LoadSheetDialog dialog = new LoadSheetDialog();
+                    //if (dialog.ShowDialog() == true)
+                    //{
+                    //    double width = 0;
+                    //    double height = 0;
+                    //    canvasControl.Children.Clear();
+                    //    if (Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
+                    //    {
+                    //        mSheet = new SpriteSheet(this, canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
+                    //        settingsPanel.DataContext = mSheet;
+                    //    }
+                    //}
                 }
 
                 
