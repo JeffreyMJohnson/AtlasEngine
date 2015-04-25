@@ -31,7 +31,9 @@
                     <RowDefinition/>
                     <RowDefinition Height=".5*"/>
                 </Grid.RowDefinitions>
-                <!--treeview here-->
+                <ScrollViewer Name="treeviewScrollWindow" Grid.Column="0" Grid.Row="0" VerticalScrollBarVisibility="Auto" >
+                    <TreeView Name="groupsTree"/>
+                </ScrollViewer>
                 <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Content="_Width"/>
@@ -41,13 +43,17 @@
                         <Label Content="_Height"/>
                         <TextBox x:Name="txtHeight" Width="75" Text="{Binding Path=Height}"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Label Content="HasChanged"/>
+                        <CheckBox Name="hasChangedCheck" IsChecked="{Binding HasChanged}"/>
+                    </StackPanel>
                 </StackPanel>
 
             </Grid>
         </Border>
 
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="1" >
-            <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#0f00ff00">
                 <Canvas x:Name="canvasControl" Background="Beige"/>
             </ScrollViewer>
         </Border>

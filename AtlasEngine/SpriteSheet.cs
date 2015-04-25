@@ -23,14 +23,16 @@ namespace AtlasEngine
         Canvas mCanvasControl = null;
         XmlDocument mAtlasDoc = new XmlDocument();
         XmlElement mRootNode = null;
+        bool mHasChanged = false;//flag for checking if need to remind to save.
         //XmlElement mGroupsNode;
 
-        public string Foo
+        public bool HasChanged
         {
-            get { return "Foo"; }
+            get { return mHasChanged; }
             set
             {
-                OnPropertyChanged("Foo");
+                mHasChanged = value;
+                OnPropertyChanged("HasChanged");
             }
         }
 
@@ -66,15 +68,6 @@ namespace AtlasEngine
             Height = height;
         }
 
-        //public void Init(Canvas canvas, string basePath, double width, double height, bool normalize)
-        //{
-        //    mBasePath = basePath;
-        //    mIsNormalized = normalize;
-        //    mCanvasControl = canvas;
-        //    Width = width;
-        //    Height = height;
-        //}
-
         public void Save(string filePath)
         {
             //build image file name
@@ -84,7 +77,7 @@ namespace AtlasEngine
 
             SaveImageFile(path + XmlToPngFile(file));
             SaveAtlasFile(path, file);
-
+            HasChanged = false;
 
         }
 
@@ -188,6 +181,7 @@ namespace AtlasEngine
             Image2 img = new Image2(path);
             GetNextImagePosition(img);
             mCanvasControl.Children.Add(img.ImageControl);
+            HasChanged = true;
 
             //XmlElement spriteNode = mAtlasDoc.CreateElement("sprite");
             //XmlAttribute att = mAtlasDoc.CreateAttribute("id");

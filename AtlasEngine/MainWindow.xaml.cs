@@ -24,6 +24,9 @@ namespace AtlasEngine
         //TODO: REMOVE FOR RELEASE
         string basePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\resources\";
         SpriteSheet mSheet;
+        
+
+
 
 
         public MainWindow()
@@ -33,8 +36,6 @@ namespace AtlasEngine
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //CreateNewSheet();
-
             TestIt();
             settingsPanel.DataContext = mSheet;
         }
@@ -59,17 +60,29 @@ namespace AtlasEngine
 
         private void CreateNewSheet()
         {
-            LoadSheetDialog dialog = new LoadSheetDialog();
-            if (dialog.ShowDialog() == true)
+            if(mSheet.HasChanged)
             {
-                double width = 0;
-                double height = 0;
-                canvasControl.Children.Clear();
-                if (Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
+
+                if (MessageBox.Show("Your sheet has changed since your last save, you will lose this work.", "Are You Sure?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    // mSheet = new SpriteSheet(canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
+                    LoadSheetDialog dialog = new LoadSheetDialog();
+                    if (dialog.ShowDialog() == true)
+                    {
+                        double width = 0;
+                        double height = 0;
+                        canvasControl.Children.Clear();
+                        if (Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
+                        {
+                            mSheet = new SpriteSheet(canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
+                            settingsPanel.DataContext = mSheet;
+                        }
+                    }
                 }
+
+                
             }
+
+
         }
 
         private void HandleMenuFileSelectClick(object sender, RoutedEventArgs e)
