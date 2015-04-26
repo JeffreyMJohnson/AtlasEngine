@@ -47,7 +47,6 @@ namespace AtlasEngine
 
         }
 
-
         private void CreateNewSheet()
         {
             if (mSheet.HasChanged)

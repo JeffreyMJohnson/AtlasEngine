@@ -22,7 +22,7 @@ namespace AtlasEngine
         List<Image2> mSpritesList = new List<Image2>();
         string mBasePath = "";
         bool mIsNormalized = false;
-        bool mAutoResize = true;
+        bool mAutoResize = false;
         double mWidth = 0;
         double mHeight = 0;
         Canvas mCanvasControl = null;
@@ -86,6 +86,7 @@ namespace AtlasEngine
             set
             {
                 mAutoResize = value;
+                SwitchSettingsPanelUI();
                 OnPropertyChanged("AutoResize");
             }
         }
@@ -99,6 +100,7 @@ namespace AtlasEngine
             Width = width;
             Height = height;
             mWindow = window;
+            AutoResize = false; ;
             InitAtlasDoc();
         }
 
@@ -231,6 +233,24 @@ namespace AtlasEngine
             HasChanged = false;
             InitAtlasDoc();
 
+        }
+
+        private void SwitchSettingsPanelUI()
+        {
+            if(mAutoResize)
+            {
+                mWindow.txtHeightWrite.Visibility = System.Windows.Visibility.Hidden;
+                mWindow.txtWidthWrite.Visibility = System.Windows.Visibility.Hidden;
+                mWindow.txtHeightReadOnly.Visibility = System.Windows.Visibility.Visible;
+                mWindow.txtWidthReadOnly.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                mWindow.txtHeightWrite.Visibility = System.Windows.Visibility.Visible;
+                mWindow.txtWidthWrite.Visibility = System.Windows.Visibility.Visible;
+                mWindow.txtHeightReadOnly.Visibility = System.Windows.Visibility.Hidden;
+                mWindow.txtWidthReadOnly.Visibility = System.Windows.Visibility.Hidden;
+            }
         }
 
         void GetNextImagePosition(Image2 newImage)

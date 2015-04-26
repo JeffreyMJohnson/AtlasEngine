@@ -49,11 +49,22 @@
 
                 </ScrollViewer>
                 <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel" HorizontalAlignment="Center">
+                    <TextBlock Text="Sprite Sheet Settings" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="_Width"/>
-                        <TextBox x:Name="txtWidth" Width="Auto" Text="{Binding Width}"/>
-                        <Label Content="_Height"/>
-                        <TextBox x:Name="txtHeight" Width="Auto" Text="{Binding Path=Height}"/>
+                        <Label Content="_Width" Target="{Binding ElementName=txtWidthWrite}"/>
+                        <Grid>
+                            <TextBlock x:Name="txtWidthReadOnly" Width="Auto" Text="{Binding Width}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtWidthWrite" Width="Auto" Text="{Binding Width}" Visibility="Hidden">
+                                
+                            </TextBox>
+                        </Grid>
+                        
+                        <Label Content="_Height" Target="{Binding ElementName=txtHeightWrite}"/>
+                        <Grid>
+                            <TextBlock x:Name="txtHeightReadOnly" Text="{Binding Path=Height}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtHeightWrite" Width="Auto" Text="{Binding Path=Height}" Visibility="Hidden"/>
+                        </Grid>
+                        
                         <Label Content="_Auto"/>
                         <CheckBox Name="chkAutoResize" IsChecked="{Binding Path=AutoResize}" VerticalAlignment="Center"/>
                     </StackPanel>
