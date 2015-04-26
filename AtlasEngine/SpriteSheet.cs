@@ -22,6 +22,7 @@ namespace AtlasEngine
         List<Image2> mSpritesList = new List<Image2>();
         string mBasePath = "";
         bool mIsNormalized = false;
+        bool mAutoResize = true;
         double mWidth = 0;
         double mHeight = 0;
         Canvas mCanvasControl = null;
@@ -47,11 +48,11 @@ namespace AtlasEngine
                 {
                     if (mHasChanged)
                     {
-                        mWindow.canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(25, 255, 255, 00));
+                        mWindow.canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 00));
                     }
                     else
                     {
-                        mWindow.canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(25, 00, 255, 00));
+                        mWindow.canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(100, 00, 255, 00));
                     }
                 }
             }
@@ -76,6 +77,16 @@ namespace AtlasEngine
                 mHeight = value;
                 mCanvasControl.Height = value;
                 OnPropertyChanged("Height");
+            }
+        }
+
+        public bool AutoResize
+        {
+            get { return mAutoResize; }
+            set
+            {
+                mAutoResize = value;
+                OnPropertyChanged("AutoResize");
             }
         }
 

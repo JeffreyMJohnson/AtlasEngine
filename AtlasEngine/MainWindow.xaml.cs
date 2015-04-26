@@ -14,6 +14,7 @@ namespace AtlasEngine
         string basePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\resources\";
         SpriteSheet mSheet;
 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -120,11 +121,5 @@ namespace AtlasEngine
 
         }
 
-
-        private void UpdateImageDisplay()
-        {
-            int pixelWidth, pixelHeight;
-
-        }
     }
 }

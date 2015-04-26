@@ -48,19 +48,20 @@
 
 
                 </ScrollViewer>
-                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
                         <Label Content="_Width"/>
-                        <TextBox x:Name="txtWidth" Width="75" Text="{Binding Width}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBox x:Name="txtWidth" Width="Auto" Text="{Binding Width}"/>
                         <Label Content="_Height"/>
-                        <TextBox x:Name="txtHeight" Width="75" Text="{Binding Path=Height}"/>
+                        <TextBox x:Name="txtHeight" Width="Auto" Text="{Binding Path=Height}"/>
+                        <Label Content="_Auto"/>
+                        <CheckBox Name="chkAutoResize" IsChecked="{Binding Path=AutoResize}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                    <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Label Content="HasChanged"/>
-                        <CheckBox Name="hasChangedCheck" IsChecked="{Binding HasChanged}"/>
-                    </StackPanel>
+                        <CheckBox Name="hasChangedCheck" IsChecked="{Binding HasChanged}" VerticalAlignment="Center"/>
+                    </StackPanel>-->
                 </StackPanel>
 
             </Grid>
