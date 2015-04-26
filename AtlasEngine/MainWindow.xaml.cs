@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Controls;
 
 
 namespace AtlasEngine
@@ -44,6 +45,8 @@ namespace AtlasEngine
             {
                 mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
             }
+
+            
 
         }
 
@@ -118,6 +121,11 @@ namespace AtlasEngine
             }
             this.Close();
 
+        }
+
+        private void HighlightTextbox(object sender, RoutedEventArgs e)
+        {
+            (sender as TextBox).SelectAll();
         }
 
     }

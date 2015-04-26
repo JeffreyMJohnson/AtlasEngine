@@ -243,6 +243,9 @@ namespace AtlasEngine
                 mWindow.txtWidthWrite.Visibility = System.Windows.Visibility.Hidden;
                 mWindow.txtHeightReadOnly.Visibility = System.Windows.Visibility.Visible;
                 mWindow.txtWidthReadOnly.Visibility = System.Windows.Visibility.Visible;
+
+                mWindow.lblWidth.Content = "Width";
+                mWindow.lblHeight.Content = "Height";
             }
             else
             {
@@ -250,6 +253,8 @@ namespace AtlasEngine
                 mWindow.txtWidthWrite.Visibility = System.Windows.Visibility.Visible;
                 mWindow.txtHeightReadOnly.Visibility = System.Windows.Visibility.Hidden;
                 mWindow.txtWidthReadOnly.Visibility = System.Windows.Visibility.Hidden;
+                mWindow.lblWidth.Content = "_Width";
+                mWindow.lblHeight.Content = "_Height";
             }
         }
 
