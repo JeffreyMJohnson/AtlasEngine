@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace AtlasEngine
 {
@@ -23,6 +13,7 @@ namespace AtlasEngine
         //TODO: REMOVE FOR RELEASE
         string basePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\resources\";
         SpriteSheet mSheet;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,8 +21,11 @@ namespace AtlasEngine
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //CreateNewSheet();
             TestIt();
+            settingsPanel.DataContext = mSheet;
+            XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
+            root.Document = mSheet.AtlasDoc;
+
         }
 
         /// <summary>
@@ -39,7 +33,7 @@ namespace AtlasEngine
         /// </summary>
         void TestIt()
         {
-            mSheet = new SpriteSheet(canvasControl, basePath, 256, 256, false);
+            mSheet = new SpriteSheet(this, canvasControl, basePath, 256, 256, false);
             for (int i = 0; i < 10; i++)
             {
                 mSheet.AddSprite(basePath + @"test_images\med\green_square_med.png");
@@ -49,22 +43,26 @@ namespace AtlasEngine
             {
                 mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
             }
+
         }
 
 
         private void CreateNewSheet()
         {
-            LoadSheetDialog dialog = new LoadSheetDialog();
-            if (dialog.ShowDialog() == true)
+            if (mSheet.HasChanged)
             {
-                double width = 0;
-                double height = 0;
-                canvasControl.Children.Clear();
-                if(Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
+
+                if (PopAreYouSureBox() == MessageBoxResult.Yes)
                 {
-                    mSheet = new SpriteSheet(canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
+                    mSheet.Clear();
                 }
             }
+
+        }
+
+        private MessageBoxResult PopAreYouSureBox()
+        {
+            return MessageBox.Show("Your sheet has changed since your last save, you will lose this work.", "Are You Sure?", MessageBoxButton.YesNo);
         }
 
         private void HandleMenuFileSelectClick(object sender, RoutedEventArgs e)
@@ -85,7 +83,7 @@ namespace AtlasEngine
                 {
                     mSheet.AddSprite(fileNames[i]);
                 }
-                
+
             }
         }
 
@@ -111,9 +109,17 @@ namespace AtlasEngine
 
         private void HandleMenuExitClick(object sender, RoutedEventArgs e)
         {
+            if (mSheet.HasChanged)
+            {
+                if (PopAreYouSureBox() == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
             this.Close();
+
         }
-        
+
 
         private void UpdateImageDisplay()
         {

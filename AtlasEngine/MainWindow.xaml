@@ -1,18 +1,35 @@
 ﻿<Window x:Class="AtlasEngine.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AtlasEngine"
         Title="Atlas Engine" Height="768" Width="1024"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        x:Name="window">
+    <Window.Resources>
+        <XmlDataProvider x:Key="xmlData" XPath="/SpriteSheet/group" />
+
+        <HierarchicalDataTemplate DataType="sprite" x:Key="sprite">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="ID:"/>
+                <TextBlock Text="{Binding XPath=@id}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="group" ItemsSource="{Binding XPath=./*}">
+            <TextBlock Text="group"/>
+        </HierarchicalDataTemplate>
+
+    </Window.Resources>
     <Grid x:Name="gridMain">
-        <!--<Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".5*"/>
             <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>-->
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding ElementName=gridMain, Path=ActualWidth}" Grid.Row="0">
+        <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding ElementName=gridMain, Path=ActualWidth}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <MenuItem Header="_File">
                 <MenuItem Header="_New Sprite Sheet" Click="HandleNewSpriteSheetClick"/>
                 <MenuItem Header="_Save Sprite Sheet" Click="HandleSaveSheetClick"/>
@@ -20,9 +37,40 @@
                 <MenuItem Header="E_xit Program" Click="HandleMenuExitClick" />
             </MenuItem>
         </Menu>
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Canvas x:Name="canvasControl" Background="Beige"/>
-        </ScrollViewer>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height=".5*"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer Name="treeviewScrollWindow" Grid.Column="0" Grid.Row="0" VerticalScrollBarVisibility="Auto" >
+                    <TreeView Name="groupsTree" DataContext="{StaticResource xmlData}" ItemsSource="{Binding}" />
+
+
+                </ScrollViewer>
+                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Label Content="_Width"/>
+                        <TextBox x:Name="txtWidth" Width="75" Text="{Binding Width}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Label Content="_Height"/>
+                        <TextBox x:Name="txtHeight" Width="75" Text="{Binding Path=Height}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Label Content="HasChanged"/>
+                        <CheckBox Name="hasChangedCheck" IsChecked="{Binding HasChanged}"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="1" >
+            <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#0f00ff00" Name="canvasScrollviewer">
+                <Canvas x:Name="canvasControl" Background="Beige"/>
+            </ScrollViewer>
+        </Border>
 
     </Grid>
 </Window>

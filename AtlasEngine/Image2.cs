@@ -15,6 +15,7 @@ namespace AtlasEngine
         ImageHighlight mHighlightRec;
         bool mIsHighlighted = false;
         double mLeft, mTop;
+        int mID;
 
         /// <summary>
         /// Path to image file.
@@ -75,11 +76,16 @@ namespace AtlasEngine
             get { return mHighlightRec.Rectangle; }
         }
 
+        public int ID
+        {
+            get { return mID; }
+        }
+
         /// <summary>
         /// MyImage constructor
         /// </summary>
         /// <param name="path">Path to image file.</param>
-        public Image2(string path)
+        public Image2(string path, int id)
         {
             mFilePath = path;
             mBMP = new BitmapImage(new Uri(mFilePath));
@@ -88,7 +94,7 @@ namespace AtlasEngine
             InitControl();
             mHighlightRec = new ImageHighlight(this);
             mControl.MouseLeftButtonUp += OnLeftButtonUp;
-
+            mID = id;
 
         }
 
