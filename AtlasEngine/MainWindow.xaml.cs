@@ -25,7 +25,7 @@ namespace AtlasEngine
             settingsPanel.DataContext = mSheet;
             XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
             root.Document = mSheet.AtlasDoc;
-            
+
         }
 
         /// <summary>
@@ -49,30 +49,20 @@ namespace AtlasEngine
 
         private void CreateNewSheet()
         {
-            if(mSheet.HasChanged)
+            if (mSheet.HasChanged)
             {
 
-                if (MessageBox.Show("Your sheet has changed since your last save, you will lose this work.", "Are You Sure?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (PopAreYouSureBox() == MessageBoxResult.Yes)
                 {
                     mSheet.Clear();
-                    //LoadSheetDialog dialog = new LoadSheetDialog();
-                    //if (dialog.ShowDialog() == true)
-                    //{
-                    //    double width = 0;
-                    //    double height = 0;
-                    //    canvasControl.Children.Clear();
-                    //    if (Double.TryParse(dialog.Width, out width) && Double.TryParse(dialog.Height, out height))
-                    //    {
-                    //        mSheet = new SpriteSheet(this, canvasControl, AppDomain.CurrentDomain.BaseDirectory, width, height, false);
-                    //        settingsPanel.DataContext = mSheet;
-                    //    }
-                    //}
                 }
-
-                
             }
 
+        }
 
+        private MessageBoxResult PopAreYouSureBox()
+        {
+            return MessageBox.Show("Your sheet has changed since your last save, you will lose this work.", "Are You Sure?", MessageBoxButton.YesNo);
         }
 
         private void HandleMenuFileSelectClick(object sender, RoutedEventArgs e)
@@ -119,7 +109,15 @@ namespace AtlasEngine
 
         private void HandleMenuExitClick(object sender, RoutedEventArgs e)
         {
+            if (mSheet.HasChanged)
+            {
+                if (PopAreYouSureBox() == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
             this.Close();
+
         }
 
 
