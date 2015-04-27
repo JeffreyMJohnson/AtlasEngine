@@ -10,6 +10,7 @@ using System.Xml;
 using System.IO;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace AtlasEngine
 {
@@ -22,6 +23,7 @@ namespace AtlasEngine
         List<Image2> mSpritesList = new List<Image2>();
         string mBasePath = "";
         bool mIsNormalized = false;
+        bool mAutoResize = false;
         double mWidth = 0;
         double mHeight = 0;
         Canvas mCanvasControl = null;
@@ -47,11 +49,11 @@ namespace AtlasEngine
                 {
                     if (mHasChanged)
                     {
-                        mWindow.canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(25, 255, 255, 00));
+                        mWindow.canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 00));
                     }
                     else
                     {
-                        mWindow.canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(25, 00, 255, 00));
+                        mWindow.canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(100, 00, 255, 00));
                     }
                 }
             }
@@ -79,6 +81,17 @@ namespace AtlasEngine
             }
         }
 
+        public bool AutoResize
+        {
+            get { return mAutoResize; }
+            set
+            {
+                mAutoResize = value;
+                SwitchSettingsPanelUI();
+                OnPropertyChanged("AutoResize");
+            }
+        }
+
 
         public SpriteSheet(MainWindow window, Canvas canvas, string basePath, double width, double height, bool normalize)
         {
@@ -88,6 +101,7 @@ namespace AtlasEngine
             Width = width;
             Height = height;
             mWindow = window;
+            AutoResize = false; ;
             InitAtlasDoc();
         }
 
@@ -175,7 +189,20 @@ namespace AtlasEngine
         public void AddSprite(string path)
         {
             Image2 img = new Image2(path, mSpritesList.Count);
-            GetNextImagePosition(img);
+            //getnextimage will return a bool representing if there is room for new image.
+            if (!GetNextImagePosition(img))
+            {
+                if (PopNotEnoughRoom() == MessageBoxResult.Yes)
+                {
+                    //set to auto resize
+                    AutoResize = true;
+                    GetNextImagePosition(img);
+                }
+                else
+                {
+                    return;
+                }
+            }
             mCanvasControl.Children.Add(img.ImageControl);
             HasChanged = true;
 
@@ -222,22 +249,115 @@ namespace AtlasEngine
 
         }
 
-        void GetNextImagePosition(Image2 newImage)
+        private MessageBoxResult PopNotEnoughRoom()
         {
-            if (mSpritesList.Count == 0) return;
+            return MessageBox.Show("Your sheet is too small to add this image. Would you like to resize automatically?", "Not enoughr room.", MessageBoxButton.YesNo);
 
-            Image2 lastImage = mSpritesList[mSpritesList.Count - 1];
-            //check if need new row
-            if (lastImage.Left + lastImage.Width + newImage.Width > Width)
+        }
+
+        private void SwitchSettingsPanelUI()
+        {
+            if (mAutoResize)
             {
-                newImage.Left = 0;
-                newImage.Top = GetHighestYInRow();
+                mWindow.txtHeightWrite.Visibility = System.Windows.Visibility.Hidden;
+                mWindow.txtWidthWrite.Visibility = System.Windows.Visibility.Hidden;
+                mWindow.txtHeightReadOnly.Visibility = System.Windows.Visibility.Visible;
+                mWindow.txtWidthReadOnly.Visibility = System.Windows.Visibility.Visible;
+
+                mWindow.lblWidth.Content = "Width";
+                mWindow.lblHeight.Content = "Height";
             }
             else
             {
+                mWindow.txtHeightWrite.Visibility = System.Windows.Visibility.Visible;
+                mWindow.txtWidthWrite.Visibility = System.Windows.Visibility.Visible;
+                mWindow.txtHeightReadOnly.Visibility = System.Windows.Visibility.Hidden;
+                mWindow.txtWidthReadOnly.Visibility = System.Windows.Visibility.Hidden;
+                mWindow.lblWidth.Content = "_Width";
+                mWindow.lblHeight.Content = "_Height";
+            }
+        }
+
+        bool GetNextImagePosition(Image2 newImage)
+        {
+            //position will be default values 0,0
+            if (mSpritesList.Count == 0)
+            {
+                //need to check if image fits
+                if (Width > newImage.Width && Height > newImage.Height)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (!AutoResize)
+                    {
+                        return false;
+                    }
+                    else//auto resize so adjust the canvas
+                    {
+                        if (Width > newImage.Width)
+                        {
+                            Width = newImage.Width;
+                        }
+                        if (Height > newImage.Height)
+                        {
+                            Height = newImage.Height;
+                        }
+                        return true;
+                    }
+
+                }
+            }
+
+            Image2 lastImage = mSpritesList[mSpritesList.Count - 1];
+            //check if need new row
+            double highestYInRow = GetHighestYInRow();
+            if (lastImage.Left + lastImage.Width + newImage.Width > Width)
+            {
+                ////wont fit in this row, will fit in new row?
+                //if (highestYInRow + newImage.Height > Height || newImage.Width > Width)
+                //{
+                //    if (!AutoResize)
+                //    {
+                //        return false;
+                //    }
+                //    else
+                //    {
+                //        //resize the canvas
+                //        if (newImage.Width > Width)
+                //        {
+                //            Width = newImage.Width;
+                //        }
+                //        if (highestYInRow + newImage.Height > Height)
+                //        {
+                //            Height = highestYInRow + newImage.Height;
+                //        }
+                //    }
+
+                //}
+
+                newImage.Left = 0;
+                newImage.Top = highestYInRow;
+            }
+            else
+            {
+                //if (lastImage.Top + newImage.Height > Height)
+                //{
+                //    if (!AutoResize)
+                //    {
+                //        return false;
+                //    }
+                //    else
+                //    {
+                //        Height = lastImage.Top + newImage.Height;
+                //    }
+
+                //}
                 newImage.Left = lastImage.Left + lastImage.Width;
                 newImage.Top = lastImage.Top;
             }
+            return true;
         }
 
         double GetHighestYInRow()

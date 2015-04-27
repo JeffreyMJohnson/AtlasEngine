@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Controls;
 
 
 namespace AtlasEngine
@@ -13,6 +14,7 @@ namespace AtlasEngine
         //TODO: REMOVE FOR RELEASE
         string basePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\resources\";
         SpriteSheet mSheet;
+
 
         public MainWindow()
         {
@@ -44,8 +46,9 @@ namespace AtlasEngine
                 mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
             }
 
-        }
+            
 
+        }
 
         private void CreateNewSheet()
         {
@@ -120,11 +123,10 @@ namespace AtlasEngine
 
         }
 
-
-        private void UpdateImageDisplay()
+        private void HighlightTextbox(object sender, RoutedEventArgs e)
         {
-            int pixelWidth, pixelHeight;
-
+            (sender as TextBox).SelectAll();
         }
+
     }
 }

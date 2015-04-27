@@ -45,21 +45,26 @@
                 </Grid.RowDefinitions>
                 <ScrollViewer Name="treeviewScrollWindow" Grid.Column="0" Grid.Row="0" VerticalScrollBarVisibility="Auto" >
                     <TreeView Name="groupsTree" DataContext="{StaticResource xmlData}" ItemsSource="{Binding}" />
-
-
                 </ScrollViewer>
-                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Label Content="_Width"/>
-                        <TextBox x:Name="txtWidth" Width="75" Text="{Binding Width}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Label Content="_Height"/>
-                        <TextBox x:Name="txtHeight" Width="75" Text="{Binding Path=Height}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Label Content="HasChanged"/>
-                        <CheckBox Name="hasChangedCheck" IsChecked="{Binding HasChanged}"/>
+                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel" HorizontalAlignment="Center">
+                    <TextBlock Text="Sprite Sheet Settings" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Name="lblWidth" Content="_Width" Target="{Binding ElementName=txtWidthWrite}"/>
+                        <Grid>
+                            <TextBlock x:Name="txtWidthReadOnly" Width="Auto" Text="{Binding Width}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtWidthWrite" Width="Auto" Text="{Binding Width}" Visibility="Hidden" GotFocus="HighlightTextbox">
+                                
+                            </TextBox>
+                        </Grid>
+                        
+                        <Label Name="lblHeight" Content="_Height" Target="{Binding ElementName=txtHeightWrite}"/>
+                        <Grid>
+                            <TextBlock x:Name="txtHeightReadOnly" Text="{Binding Path=Height}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtHeightWrite" Width="Auto" Text="{Binding Path=Height}" Visibility="Hidden" GotFocus="HighlightTextbox"/>
+                        </Grid>
+                        
+                        <Label Content="_Auto" Target="{Binding ElementName=chkAutoResize}"/>
+                        <CheckBox Name="chkAutoResize" IsChecked="{Binding Path=AutoResize}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -68,7 +73,11 @@
 
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="1" >
             <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#0f00ff00" Name="canvasScrollviewer">
-                <Canvas x:Name="canvasControl" Background="Beige"/>
+                <Canvas x:Name="canvasControl">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="C:\Users\Jeff\Documents\GitHub\AtlasEngine\AtlasEngine\resources\checkerboard_tile.png" TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,100,100" Opacity=".50"/>
+                    </Canvas.Background>
+                </Canvas>
             </ScrollViewer>
         </Border>
 
