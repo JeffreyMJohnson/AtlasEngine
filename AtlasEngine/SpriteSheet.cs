@@ -33,6 +33,8 @@ namespace AtlasEngine
         //XmlElement mGroupsNode;
         MainWindow mWindow;
 
+        
+
         public XmlDocument AtlasDoc
         {
             get { return mAtlasDoc; }
@@ -316,44 +318,44 @@ namespace AtlasEngine
             if (lastImage.Left + lastImage.Width + newImage.Width > Width)
             {
                 ////wont fit in this row, will fit in new row?
-                //if (highestYInRow + newImage.Height > Height || newImage.Width > Width)
-                //{
-                //    if (!AutoResize)
-                //    {
-                //        return false;
-                //    }
-                //    else
-                //    {
-                //        //resize the canvas
-                //        if (newImage.Width > Width)
-                //        {
-                //            Width = newImage.Width;
-                //        }
-                //        if (highestYInRow + newImage.Height > Height)
-                //        {
-                //            Height = highestYInRow + newImage.Height;
-                //        }
-                //    }
+                if (highestYInRow + newImage.Height > Height || newImage.Width > Width)
+                {
+                    if (!AutoResize)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        //resize the canvas
+                        if (newImage.Width > Width)
+                        {
+                            Width = newImage.Width;
+                        }
+                        if (highestYInRow + newImage.Height > Height)
+                        {
+                            Height = highestYInRow + newImage.Height;
+                        }
+                    }
 
-                //}
+                }
 
                 newImage.Left = 0;
                 newImage.Top = highestYInRow;
             }
             else
             {
-                //if (lastImage.Top + newImage.Height > Height)
-                //{
-                //    if (!AutoResize)
-                //    {
-                //        return false;
-                //    }
-                //    else
-                //    {
-                //        Height = lastImage.Top + newImage.Height;
-                //    }
+                if (lastImage.Top + newImage.Height > Height)
+                {
+                    if (!AutoResize)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        Height = lastImage.Top + newImage.Height;
+                    }
 
-                //}
+                }
                 newImage.Left = lastImage.Left + lastImage.Width;
                 newImage.Top = lastImage.Top;
             }

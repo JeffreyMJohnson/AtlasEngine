@@ -52,9 +52,7 @@
                         <Label Name="lblWidth" Content="_Width" Target="{Binding ElementName=txtWidthWrite}"/>
                         <Grid>
                             <TextBlock x:Name="txtWidthReadOnly" Width="Auto" Text="{Binding Width}" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtWidthWrite" Width="Auto" Text="{Binding Width}" Visibility="Hidden" GotFocus="HighlightTextbox">
-                                
-                            </TextBox>
+                            <TextBox x:Name="txtWidthWrite" Width="Auto" Text="{Binding Width}" Visibility="Hidden" GotFocus="HighlightTextbox"/>
                         </Grid>
                         
                         <Label Name="lblHeight" Content="_Height" Target="{Binding ElementName=txtHeightWrite}"/>
@@ -75,7 +73,7 @@
             <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#0f00ff00" Name="canvasScrollviewer">
                 <Canvas x:Name="canvasControl">
                     <Canvas.Background>
-                        <ImageBrush ImageSource="C:\Users\Jeff\Documents\GitHub\AtlasEngine\AtlasEngine\resources\checkerboard_tile.png" TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,100,100" Opacity=".50"/>
+                        <ImageBrush ImageSource="C:\Users\jeffrey.johnson\Documents\GitHub\AtlasEngine\AtlasEngine\resources\checkerboard_tile.png" TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,100,100" Opacity=".50"/>
                     </Canvas.Background>
                 </Canvas>
             </ScrollViewer>

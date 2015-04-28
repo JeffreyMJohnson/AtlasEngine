@@ -15,19 +15,25 @@ namespace AtlasEngine
         string basePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\resources\";
         SpriteSheet mSheet;
 
-
+        /// <summary>
+        /// MainWindow constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Window_Loaded event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             TestIt();
             settingsPanel.DataContext = mSheet;
             XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
             root.Document = mSheet.AtlasDoc;
-
         }
 
         /// <summary>
@@ -45,11 +51,11 @@ namespace AtlasEngine
             {
                 mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
             }
-
-            
-
         }
 
+        /// <summary>
+        /// Called to clear current sheet and create a new one.
+        /// </summary>
         private void CreateNewSheet()
         {
             if (mSheet.HasChanged)
@@ -63,6 +69,10 @@ namespace AtlasEngine
 
         }
 
+        /// <summary>
+        /// Helper function for popping 'Are you sure' message box.
+        /// </summary>
+        /// <returns></returns>
         private MessageBoxResult PopAreYouSureBox()
         {
             return MessageBox.Show("Your sheet has changed since your last save, you will lose this work.", "Are You Sure?", MessageBoxButton.YesNo);
