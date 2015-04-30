@@ -78,6 +78,11 @@ namespace AtlasEngine
             return MessageBox.Show("Your sheet has changed since your last save, you will lose this work.", "Are You Sure?", MessageBoxButton.YesNo);
         }
 
+        /// <summary>
+        /// Handler function called when user selects 'add new sprite(s)' in menu.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HandleMenuFileSelectClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
@@ -100,6 +105,12 @@ namespace AtlasEngine
             }
         }
 
+
+        /// <summary>
+        /// Handler function called when user selects '
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HandleNewSpriteSheetClick(object sender, RoutedEventArgs e)
         {
             CreateNewSheet();

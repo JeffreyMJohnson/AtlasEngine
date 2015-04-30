@@ -95,7 +95,6 @@ namespace AtlasEngine
             mHighlightRec = new ImageHighlight(this);
             mControl.MouseLeftButtonUp += OnLeftButtonUp;
             mID = id;
-
         }
 
         private void OnLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -122,7 +121,6 @@ namespace AtlasEngine
                 canvas.Children.Remove(mHighlightRec.Rectangle);
                 mIsHighlighted = false;
             }
-
         }
 
         void InitControl()

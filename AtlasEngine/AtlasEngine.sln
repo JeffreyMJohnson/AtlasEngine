@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtlasEngine", "AtlasEngine.csproj", "{CDCD3679-BE5D-4454-918E-383161C0002D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI_Test", "..\UI_Test\UI_Test.csproj", "{2A6BCEF8-3EAE-4EAB-A9E7-99C7F4045AAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CDCD3679-BE5D-4454-918E-383161C0002D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDCD3679-BE5D-4454-918E-383161C0002D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDCD3679-BE5D-4454-918E-383161C0002D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A6BCEF8-3EAE-4EAB-A9E7-99C7F4045AAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A6BCEF8-3EAE-4EAB-A9E7-99C7F4045AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A6BCEF8-3EAE-4EAB-A9E7-99C7F4045AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A6BCEF8-3EAE-4EAB-A9E7-99C7F4045AAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
