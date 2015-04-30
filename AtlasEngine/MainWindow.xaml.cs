@@ -2,7 +2,8 @@
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Controls;
-
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace AtlasEngine
 {
@@ -21,6 +22,15 @@ namespace AtlasEngine
         public MainWindow()
         {
             InitializeComponent();
+            //set canvas background
+            ImageBrush brush = new ImageBrush();
+            BitmapImage image = new BitmapImage(new Uri(basePath + "checkerboard_tile.png"));
+            brush.ImageSource = image;
+            brush.TileMode = TileMode.Tile;
+            brush.ViewportUnits = BrushMappingMode.Absolute;
+            brush.Viewport = new Rect(0, 0, 100, 100);
+            brush.Opacity = .5;
+            canvasControl.Background = brush;
         }
 
         /// <summary>

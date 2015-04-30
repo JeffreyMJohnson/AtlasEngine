@@ -71,11 +71,7 @@
 
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="1" >
             <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#0f00ff00" Name="canvasScrollviewer">
-                <Canvas x:Name="canvasControl">
-                    <Canvas.Background>
-                        <ImageBrush ImageSource="C:\Users\jeffrey.johnson\Documents\GitHub\AtlasEngine\AtlasEngine\resources\checkerboard_tile.png" TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,100,100" Opacity=".50"/>
-                    </Canvas.Background>
-                </Canvas>
+                <Canvas x:Name="canvasControl"/>
             </ScrollViewer>
         </Border>
 
