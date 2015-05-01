@@ -51,7 +51,7 @@ namespace Unit_Tests
         }
 
         [TestMethod]
-        public void FileConvertTest()
+        public void FileExtensionConvertTest()
         {
             string result = sheet.Invoke("XmlToPngFile", "ABC.XYZ") as string;
             Assert.AreEqual("ABC.png", result);
@@ -69,6 +69,17 @@ namespace Unit_Tests
             sheet.Invoke("ParseFilePath", args);
             Assert.AreEqual(@"ABC\DEF\", args[1]);
             Assert.AreEqual("GHI.XYZ", args[2]);
+        }
+
+        [TestMethod]
+        public void SetAtlasFileAttributeTest()
+        {
+            sheet.Invoke("InitAtlasDoc");
+            string testPath = @"TestFilePath.png";
+            sheet.Invoke("SetAtlasFileAttribute", testPath);
+            XmlDocument atlasDoc = sheet.GetProperty("AtlasDoc") as XmlDocument;
+            XmlNode result = atlasDoc.FirstChild.Attributes.GetNamedItem("filePath");
+            Assert.AreEqual(testPath, result.Value);
         }
 
     }
