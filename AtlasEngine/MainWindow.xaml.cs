@@ -51,7 +51,7 @@ namespace AtlasEngine
         /// </summary>
         void TestIt()
         {
-            mSheet = new SpriteSheet(this, canvasControl, basePath, 256, 256, false);
+            mSheet = new SpriteSheet(this, basePath, 256, 256, false);
             for (int i = 0; i < 10; i++)
             {
                 mSheet.AddSprite(basePath + @"test_images\med\green_square_med.png");

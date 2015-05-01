@@ -21,19 +21,22 @@ namespace AtlasEngine
         const int DEFAULT_IMAGE_HEIGHT = 256;
 
         List<Image2> mSpritesList = new List<Image2>();
-        string mBasePath = "";
         bool mIsNormalized = false;
         bool mAutoResize = false;
         double mWidth = 0;
         double mHeight = 0;
-        Canvas mCanvasControl = null;
         XmlDocument mAtlasDoc = new XmlDocument();
         XmlElement mRootNode = null;
         bool mHasChanged = false;//flag for checking if need to remind to save.
         //XmlElement mGroupsNode;
-        MainWindow mWindow;
+        MainWindow mWindow = null;
 
-        
+        public string BasePath { get; set; }
+
+        public MainWindow Window
+        {
+            set { mWindow = value; }
+        }
 
         public XmlDocument AtlasDoc
         {
@@ -67,7 +70,10 @@ namespace AtlasEngine
             set
             {
                 mWidth = value;
-                mCanvasControl.Width = value;
+                if (mWindow != null)
+                {
+                    mWindow.canvasControl.Width = value;
+                }
                 OnPropertyChanged("Width");
             }
         }
@@ -78,7 +84,10 @@ namespace AtlasEngine
             set
             {
                 mHeight = value;
-                mCanvasControl.Height = value;
+                if (mWindow != null)
+                {
+                    mWindow.canvasControl.Height = value;
+                }
                 OnPropertyChanged("Height");
             }
         }
@@ -94,16 +103,27 @@ namespace AtlasEngine
             }
         }
 
-
-        public SpriteSheet(MainWindow window, Canvas canvas, string basePath, double width, double height, bool normalize)
+        public SpriteSheet()
         {
-            mBasePath = basePath;
-            mIsNormalized = normalize;
-            mCanvasControl = canvas;
+            Width = 0;
+            Height = 0;
+        }
+
+        public SpriteSheet(double width, double height)
+        {
             Width = width;
             Height = height;
+            InitAtlasDoc();
+        }
+
+        public SpriteSheet(MainWindow window, string basePath, double width, double height, bool normalize)
+        {
             mWindow = window;
-            AutoResize = false; ;
+            BasePath = basePath;
+            mIsNormalized = normalize;
+            Width = width;
+            Height = height;
+            AutoResize = false;
             InitAtlasDoc();
         }
 
@@ -205,7 +225,7 @@ namespace AtlasEngine
                     return;
                 }
             }
-            mCanvasControl.Children.Add(img.ImageControl);
+            mWindow.canvasControl.Children.Add(img.ImageControl);
             HasChanged = true;
 
             mSpritesList.Add(img);
@@ -240,8 +260,7 @@ namespace AtlasEngine
 
         public void Clear()
         {
-
-            mCanvasControl.Children.RemoveRange(0, mCanvasControl.Children.Count);
+            mWindow.canvasControl.Children.RemoveRange(0, mWindow.canvasControl.Children.Count);
             Width = DEFAULT_IMAGE_WIDTH;
             Height = DEFAULT_IMAGE_HEIGHT;
             mSpritesList.Clear();
@@ -375,7 +394,7 @@ namespace AtlasEngine
         private void InitAtlasDoc()
         {
 
-
+            mAtlasDoc = new XmlDocument();
             mRootNode = mAtlasDoc.CreateElement("SpriteSheet");
 
 
