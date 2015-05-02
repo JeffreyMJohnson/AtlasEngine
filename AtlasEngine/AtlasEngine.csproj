@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AtlasDocument.cs" />
     <Compile Include="DoubleStringConverter.cs" />
     <Compile Include="LoadSheetDialog.xaml.cs">
       <DependentUpon>LoadSheetDialog.xaml</DependentUpon>
