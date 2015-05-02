@@ -135,6 +135,8 @@ namespace AtlasEngine
             string path = "";
             ParseFilePath(filePath, out  path, out file);
 
+            //refactor the parsing of the input to the UI class, and just have sheet and atlas use what they require
+
             SaveImageFile(path + XmlToPngFile(file));
             SetAtlasFileAttribute(XmlToPngFile(file));
             SaveAtlasFile(path, file);
