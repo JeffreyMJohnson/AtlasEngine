@@ -15,29 +15,6 @@ namespace Unit_Tests
     {
         PrivateObject mAtlasDocClass;
 
-        public AtlasDocumentUnitTest()
-        {
-
-        }
-
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
         #region Additional test attributes
         //
         // You can use the following additional attributes as you write your tests:
@@ -76,6 +53,20 @@ namespace Unit_Tests
 
             //verify doc has rootnode
             Assert.AreEqual(1, doc.ChildNodes.Count);
+        }
+
+        [TestMethod]
+        public void ConstructorTest_Overload()
+        {
+            mAtlasDocClass = new PrivateObject(typeof(AtlasDocument), "500", "500");
+            //verify document and root are not null
+            XmlDocument doc = mAtlasDocClass.GetField("mDocument") as XmlDocument;
+            Assert.IsNotNull(doc);
+            Assert.IsNotNull(mAtlasDocClass.GetProperty("RootNode"));
+
+            //verify width and height attributes
+            Assert.AreEqual("500", mAtlasDocClass.GetProperty("SheetWidth") as string);
+            Assert.AreEqual("500", mAtlasDocClass.GetProperty("SheetHeight") as string);
         }
 
         [TestMethod]

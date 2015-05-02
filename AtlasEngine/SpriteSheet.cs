@@ -25,8 +25,9 @@ namespace AtlasEngine
         bool mAutoResize = false;
         double mWidth = 0;
         double mHeight = 0;
-        XmlDocument mAtlasDoc = new XmlDocument();
-        XmlElement mRootNode = null;
+        AtlasDocument mAtlasDoc = new AtlasDocument();
+        //XmlDocument mAtlasDoc = new XmlDocument();
+        //XmlElement mRootNode = null;
         bool mHasChanged = false;//flag for checking if need to remind to save.
         //XmlElement mGroupsNode;
         MainWindow mWindow = null;
@@ -38,10 +39,10 @@ namespace AtlasEngine
             set { mWindow = value; }
         }
 
-        public XmlDocument AtlasDoc
-        {
-            get { return mAtlasDoc; }
-        }
+        //public XmlDocument AtlasDoc
+        //{
+        //    get { return mAtlasDoc; }
+        //}
 
         public bool HasChanged
         {
@@ -70,6 +71,7 @@ namespace AtlasEngine
             set
             {
                 mWidth = value;
+                mAtlasDoc.SheetWidth = mWidth.ToString();
                 if (mWindow != null)
                 {
                     mWindow.canvasControl.Width = value;
@@ -84,6 +86,7 @@ namespace AtlasEngine
             set
             {
                 mHeight = value;
+                mAtlasDoc.SheetHeight = mHeight.ToString();
                 if (mWindow != null)
                 {
                     mWindow.canvasControl.Height = value;
@@ -113,7 +116,6 @@ namespace AtlasEngine
         {
             Width = width;
             Height = height;
-            InitAtlasDoc();
         }
 
         public SpriteSheet(MainWindow window, string basePath, double width, double height, bool normalize)
@@ -124,7 +126,6 @@ namespace AtlasEngine
             Width = width;
             Height = height;
             AutoResize = false;
-            InitAtlasDoc();
         }
 
         public void Save(string filePath)
@@ -141,13 +142,13 @@ namespace AtlasEngine
 
         }
 
-        void SetAtlasFileAttribute(string file)
-        {
-            //set filepath attribute on atlas file
-            XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
-            att.Value = file;
-            mRootNode.SetAttributeNode(att);
-        }
+        //void SetAtlasFileAttribute(string file)
+        //{
+        //    //set filepath attribute on atlas file
+        //    XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
+        //    att.Value = file;
+        //    mRootNode.SetAttributeNode(att);
+        //}
 
 
         string XmlToPngFile(string file)
@@ -165,11 +166,11 @@ namespace AtlasEngine
         }
 
 
-        void SaveAtlasFile(string path, string file)
-        {
-            //save atlas file
-            mAtlasDoc.Save(path + file);
-        }
+        //void SaveAtlasFile(string path, string file)
+        //{
+        //    //save atlas file
+        //    mAtlasDoc.Save(path + file);
+        //}
 
         void SaveImageFile(string filePath)
         {

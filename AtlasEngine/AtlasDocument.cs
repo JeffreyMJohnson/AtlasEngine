@@ -20,6 +20,13 @@ namespace AtlasEngine
             mDocument.AppendChild(mRootNode);
         }
 
+        public AtlasDocument(string width, string height) : this()
+        {
+            SheetWidth = width;
+            SheetHeight = height;
+
+        }
+
         /*properties*/
         public XmlNode RootNode
         {
@@ -96,6 +103,31 @@ namespace AtlasEngine
             }
         }
 
+        public string SheetPath
+        {
+            get
+            {
+                XmlAttribute pathAtt =  mRootNode.Attributes.GetNamedItem("filePath") as XmlAttribute;
+                if(pathAtt != null)
+                {
+                    return pathAtt.Value;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            set
+            {
+                XmlAttribute pathAtt = mRootNode.Attributes.GetNamedItem("filePath") as XmlAttribute;
+                if(pathAtt == null)
+                {
+                    pathAtt = mDocument.CreateAttribute("filePath");
+                }
+                pathAtt.Value = value;
+            }
+        }
+
         /*public methods*/
         public void AddSprite(string id, string x, string y, string width, string height)
         {
@@ -147,5 +179,9 @@ namespace AtlasEngine
             return result;
         }
 
+        public void Save(string path)
+        {
+            mDocument.Save(path);
+        }
     }
 }
