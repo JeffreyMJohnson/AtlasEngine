@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AtlasEngine;
 using System.Xml;
+using System.IO;
+
 
 namespace Unit_Tests
 {
@@ -13,7 +15,7 @@ namespace Unit_Tests
     [TestClass]
     public class AtlasDocumentUnitTest
     {
-        PrivateObject mAtlasDocClass;
+        AtlasDocument mAtlasDoc;
 
         #region Additional test attributes
         //
@@ -40,16 +42,16 @@ namespace Unit_Tests
         [TestInitialize]
         public void TestInit()
         {
-            mAtlasDocClass = new PrivateObject(typeof(AtlasDocument));
+           mAtlasDoc = new AtlasDocument();
         }
 
         [TestMethod]
         public void ConstructorTest()
         {
-           //verify document and root are not null
-            XmlDocument doc = mAtlasDocClass.GetField("mDocument") as XmlDocument;
+            //verify document and root are not null
+            XmlDocument doc = mAtlasDoc.XMLDoc;
             Assert.IsNotNull(doc);
-            Assert.IsNotNull(mAtlasDocClass.GetProperty("RootNode"));
+            Assert.IsNotNull(mAtlasDoc.RootNode);
 
             //verify doc has rootnode
             Assert.AreEqual(1, doc.ChildNodes.Count);
@@ -58,29 +60,29 @@ namespace Unit_Tests
         [TestMethod]
         public void ConstructorTest_Overload()
         {
-            mAtlasDocClass = new PrivateObject(typeof(AtlasDocument), "500", "500");
+            mAtlasDoc = new AtlasDocument("500", "500");
             //verify document and root are not null
-            XmlDocument doc = mAtlasDocClass.GetField("mDocument") as XmlDocument;
+           XmlDocument doc = mAtlasDoc.XMLDoc;
             Assert.IsNotNull(doc);
-            Assert.IsNotNull(mAtlasDocClass.GetProperty("RootNode"));
+            Assert.IsNotNull(mAtlasDoc.RootNode);
 
             //verify width and height attributes
-            Assert.AreEqual("500", mAtlasDocClass.GetProperty("SheetWidth") as string);
-            Assert.AreEqual("500", mAtlasDocClass.GetProperty("SheetHeight") as string);
+            Assert.AreEqual("500", mAtlasDoc.SheetWidth);
+            Assert.AreEqual("500", mAtlasDoc.SheetHeight);
         }
 
         [TestMethod]
         public void WidthPropTest_NotSet()
         {
-            string result = mAtlasDocClass.GetProperty("SheetWidth") as string;
+            string result = mAtlasDoc.SheetWidth;
             Assert.AreEqual("", result);
 
-            mAtlasDocClass.SetProperty("SheetWidth", "100");
-            result = mAtlasDocClass.GetProperty("SheetWidth") as string;
+            mAtlasDoc.SheetWidth = "100";
+            result = mAtlasDoc.SheetWidth;
             Assert.AreEqual("100", result);
 
             //verify xml
-            result = GetRootNodeAttribute("width");
+            result = GetRootNodeAttribute(mAtlasDoc.XMLDoc, "width");
             Assert.IsNotNull(result);
             Assert.AreEqual("100", result);
 
@@ -90,14 +92,15 @@ namespace Unit_Tests
         public void WidthPropTest_Set()
         {
             //verify the attribute is set when already there
-            mAtlasDocClass.SetProperty("SheetWidth", "100");
-            mAtlasDocClass.SetProperty("SheetWidth", "200");
+            mAtlasDoc.SheetWidth = "100";
+            mAtlasDoc.SheetWidth = "200";
+
 
             //check variable
-            Assert.AreEqual("200", mAtlasDocClass.GetFieldOrProperty("SheetWidth") as string);
+            Assert.AreEqual("200", mAtlasDoc.SheetWidth);
 
             //verify xml
-            string result = GetRootNodeAttribute("width");
+            string result = GetRootNodeAttribute(mAtlasDoc.XMLDoc, "width");
             Assert.IsNotNull(result);
             Assert.AreEqual("200", result);
         }
@@ -107,15 +110,15 @@ namespace Unit_Tests
         [TestMethod]
         public void HeightPropTest_NotSet()
         {
-            string result = mAtlasDocClass.GetProperty("SheetHeight") as string;
+           string result = mAtlasDoc.SheetHeight;
             Assert.AreEqual("", result);
 
-            mAtlasDocClass.SetProperty("SheetHeight", "100");
-            result = mAtlasDocClass.GetProperty("SheetHeight") as string;
+            mAtlasDoc.SheetHeight = "100";
+            result = mAtlasDoc.SheetHeight;
             Assert.AreEqual("100", result);
 
             //verify xml
-            result = GetRootNodeAttribute("height");
+            result = GetRootNodeAttribute(mAtlasDoc.XMLDoc, "height");
             Assert.IsNotNull(result);
             Assert.AreEqual("100", result);
 
@@ -125,14 +128,14 @@ namespace Unit_Tests
         public void HeightPropTest_Set()
         {
             //verify the attribute is set when already there
-            mAtlasDocClass.SetProperty("SheetHeight", "100");
-            mAtlasDocClass.SetProperty("SheetHeight", "200");
+            mAtlasDoc.SheetHeight = "100";
+            mAtlasDoc.SheetHeight = "200";
 
             //check variable
-            Assert.AreEqual("200", mAtlasDocClass.GetFieldOrProperty("SheetHeight") as string);
+            Assert.AreEqual("200", mAtlasDoc.SheetHeight);
 
             //verify xml
-            string result = GetRootNodeAttribute("height");
+            string result = GetRootNodeAttribute(mAtlasDoc.XMLDoc, "height");
             Assert.IsNotNull(result);
             Assert.AreEqual("200", result);
         }
@@ -146,9 +149,9 @@ namespace Unit_Tests
             string width = "100";
             string height = "100";
 
-            mAtlasDocClass.Invoke("AddSprite", id, x, y, width, height);
+            mAtlasDoc.AddSprite(id, x, y, width, height);
 
-            XmlNode spriteNode = mAtlasDocClass.Invoke("GetSpriteNodeById", id) as XmlNode;
+            XmlNode spriteNode = mAtlasDoc.GetSpriteNodeById(id);
             Assert.IsNotNull(spriteNode);
 
             Assert.AreEqual(id, spriteNode.Attributes.GetNamedItem("id").Value);
@@ -166,24 +169,24 @@ namespace Unit_Tests
             string y = "0";
             string width = "100";
             string height = "100";
-            mAtlasDocClass.Invoke("AddSprite", id, x, y, width, height);
+            mAtlasDoc.AddSprite(id, x, y, width, height);
 
             id = "20";
             x = "100";
             y = "100";
             width = "200";
             height = "200";
-            mAtlasDocClass.Invoke("AddSprite", id, x, y, width, height);
+            mAtlasDoc.AddSprite(id, x, y, width, height);
 
             id = "30";
             x = "300";
             y = "300";
             width = "100";
             height = "100";
-            mAtlasDocClass.Invoke("AddSprite", id, x, y, width, height);
+            mAtlasDoc.AddSprite(id, x, y, width, height);
 
             //verify second
-            XmlNode spriteNode = mAtlasDocClass.Invoke("GetSpriteNodeById", "20") as XmlNode;
+            XmlNode spriteNode = mAtlasDoc.GetSpriteNodeById("20");
             Assert.IsNotNull(spriteNode);
 
             Assert.AreEqual("20", spriteNode.Attributes.GetNamedItem("id").Value);
@@ -192,7 +195,7 @@ namespace Unit_Tests
             Assert.AreEqual("200", spriteNode.Attributes.GetNamedItem("width").Value);
             Assert.AreEqual("200", spriteNode.Attributes.GetNamedItem("height").Value);
 
-            spriteNode = mAtlasDocClass.Invoke("GetSpriteNodeById", id) as XmlNode;
+            spriteNode = mAtlasDoc.GetSpriteNodeById(id);
             Assert.IsNotNull(spriteNode);
 
             Assert.AreEqual(id, spriteNode.Attributes.GetNamedItem("id").Value);
@@ -204,9 +207,60 @@ namespace Unit_Tests
 
         }
 
-        private string GetRootNodeAttribute(string attributeName)
+        [TestMethod]
+        public void SaveDocTest()
         {
-            XmlNode rootNode = mAtlasDocClass.GetProperty("RootNode") as XmlNode;
+            mAtlasDoc.SheetWidth = "500";
+            mAtlasDoc.SheetHeight = "200";
+            mAtlasDoc.AddSprite("0", "0", "0", "100", "100");
+            mAtlasDoc.AddSprite("1", "100", "100", "100", "100");
+            mAtlasDoc.AddSprite("2", "0", "100", "100", "100");
+
+            string filePath = Environment.CurrentDirectory + @"\SaveDocTest.xml";
+
+            mAtlasDoc.SheetPath = "SavedDocTest.png";
+
+            mAtlasDoc.Save(filePath);
+
+            XmlDocument savedFile = new XmlDocument();
+            savedFile.Load(filePath);
+
+
+            //verify root attributes
+            Assert.AreEqual("500", GetRootNodeAttribute(savedFile, "width"));
+            Assert.AreEqual("200", GetRootNodeAttribute(savedFile, "height"));
+            Assert.AreEqual("SavedDocTest.png", GetRootNodeAttribute(savedFile, "filePath"));
+            
+            //verify 3 sprite nodes
+            Assert.AreEqual(3, savedFile.FirstChild.FirstChild.ChildNodes.Count);
+
+            //verify sprite attributes
+            XmlElement sprite = savedFile.FirstChild.FirstChild.ChildNodes.Item(0) as XmlElement;
+            Assert.AreEqual("0", sprite.Attributes.GetNamedItem("id").Value);
+            Assert.AreEqual("0", sprite.Attributes.GetNamedItem("x").Value);
+            Assert.AreEqual("0", sprite.Attributes.GetNamedItem("y").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("width").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("height").Value);
+
+            sprite = savedFile.FirstChild.FirstChild.ChildNodes.Item(1) as XmlElement;
+            Assert.AreEqual("1", sprite.Attributes.GetNamedItem("id").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("x").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("y").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("width").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("height").Value);
+
+            sprite = savedFile.FirstChild.FirstChild.ChildNodes.Item(2) as XmlElement;
+            Assert.AreEqual("2", sprite.Attributes.GetNamedItem("id").Value);
+            Assert.AreEqual("0", sprite.Attributes.GetNamedItem("x").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("y").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("width").Value);
+            Assert.AreEqual("100", sprite.Attributes.GetNamedItem("height").Value);
+
+        }
+
+        private string GetRootNodeAttribute(XmlDocument doc, string attributeName)
+        {
+            XmlNode rootNode = doc.FirstChild;
             XmlNode att = rootNode.Attributes.GetNamedItem(attributeName);
             if (att == null)
                 return null;

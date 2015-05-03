@@ -171,13 +171,6 @@ namespace AtlasEngine
             file = filePath.Substring(whackIndex + 1, filePath.Length - (whackIndex + 1));
         }
 
-
-        //void SaveAtlasFile(string path, string file)
-        //{
-        //    //save atlas file
-        //    mAtlasDoc.Save(path + file);
-        //}
-
         void SaveImageFile(string filePath)
         {
 
@@ -232,6 +225,7 @@ namespace AtlasEngine
                     return;
                 }
             }
+
             mWindow.canvasControl.Children.Add(img.ImageControl);
             HasChanged = true;
 
@@ -243,33 +237,6 @@ namespace AtlasEngine
                 ((int)img.Top).ToString(),
                 ((int)img.Width).ToString(),
                 ((int)img.Height).ToString());
-
-            ////build xml
-            //XmlElement spriteNode = mAtlasDoc.CreateElement("sprite");
-            //XmlAttribute att = mAtlasDoc.CreateAttribute("id");
-            //att.Value = img.ID.ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            //att = mAtlasDoc.CreateAttribute("x");
-            //att.Value = ((int)img.Left).ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            //att = mAtlasDoc.CreateAttribute("y");
-            //att.Value = ((int)img.Top).ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            //att = mAtlasDoc.CreateAttribute("width");
-            //att.Value = ((int)img.Width).ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            //att = mAtlasDoc.CreateAttribute("height");
-            //att.Value = ((int)img.Height).ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            ////append to group node
-            //mRootNode.FirstChild.AppendChild(spriteNode);
-
-
         }
 
         public void Clear()
