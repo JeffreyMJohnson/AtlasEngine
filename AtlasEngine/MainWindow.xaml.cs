@@ -7,6 +7,11 @@ using System.Windows.Media;
 
 namespace AtlasEngine
 {
+    /*TODO
+     * implement auto resize in main window
+     */
+    
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -15,6 +20,10 @@ namespace AtlasEngine
         //TODO: REMOVE FOR RELEASE
         string basePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\resources\";
         SpriteSheet mSheet;
+        private const uint DEFAULT_SHEET_WIDTH = 512;
+        private const uint DEFAULT_SHEET_HEIGHT = 512;
+        private AtlasDocument mAtlasDoc = new AtlasDocument(DEFAULT_SHEET_WIDTH.ToString(), DEFAULT_SHEET_HEIGHT.ToString());
+        private bool mIsCanvasDirty = false;
 
         /// <summary>
         /// MainWindow constructor
@@ -22,15 +31,31 @@ namespace AtlasEngine
         public MainWindow()
         {
             InitializeComponent();
-            //set canvas background
-            ImageBrush brush = new ImageBrush();
-            BitmapImage image = new BitmapImage(new Uri(basePath + "checkerboard_tile.png"));
-            brush.ImageSource = image;
-            brush.TileMode = TileMode.Tile;
-            brush.ViewportUnits = BrushMappingMode.Absolute;
-            brush.Viewport = new Rect(0, 0, 100, 100);
-            brush.Opacity = .5;
-            canvasControl.Background = brush;
+            SetCanvasBackground();
+            IsCanvasDirty = false;
+        }
+
+        public bool IsCanvasDirty
+        {
+            get
+            {
+                return mIsCanvasDirty;
+            }
+
+            set
+            {
+                if (value)
+                {
+                    //turn background yellow
+                    canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 00));
+                }
+                else
+                {
+                    //turn green
+                    canvasScrollviewer.Background = new SolidColorBrush(Color.FromArgb(100, 00, 255, 00));
+                }
+                mIsCanvasDirty = value;
+            }
         }
 
         /// <summary>
@@ -43,7 +68,7 @@ namespace AtlasEngine
             TestIt();
             settingsPanel.DataContext = mSheet;
             XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
-            root.Document = mSheet.AtlasDocument;
+            root.Document = mAtlasDoc.XMLDoc;
         }
 
         /// <summary>
@@ -52,14 +77,16 @@ namespace AtlasEngine
         void TestIt()
         {
             mSheet = new SpriteSheet(this, basePath, 256, 256, false);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 2; i++)
             {
-                mSheet.AddSprite(basePath + @"test_images\med\green_square_med.png");
+                //mSheet.AddSprite(basePath + @"test_images\med\green_square_med.png");
+                AddSprite(basePath + @"test_images\med\green_square_med.png");
             }
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 2; i++)
             {
-                mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
+               // mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
+                AddSprite(basePath + @"test_images\small\eight_ball_small.png");
             }
         }
 
@@ -68,12 +95,13 @@ namespace AtlasEngine
         /// </summary>
         private void CreateNewSheet()
         {
-            if (mSheet.HasChanged)
+            if (IsCanvasDirty)
             {
 
                 if (PopAreYouSureBox() == MessageBoxResult.Yes)
                 {
-                    mSheet.Clear();
+                    //mSheet.Clear();
+                    ClearCanvas();
                 }
             }
 
@@ -109,7 +137,9 @@ namespace AtlasEngine
 
                 for (int i = 0; i < fileNames.Length; i++)
                 {
-                    mSheet.AddSprite(fileNames[i]);
+                    /*implement addSprite function and call it here*/
+                    //mSheet.AddSprite(fileNames[i]);
+                    AddSprite(fileNames[i]);
                 }
 
             }
@@ -157,6 +187,121 @@ namespace AtlasEngine
         private void HighlightTextbox(object sender, RoutedEventArgs e)
         {
             (sender as TextBox).SelectAll();
+        }
+
+        private void AddSprite(string filePath)
+        {
+            Image newImageControl = new Image();
+            BitmapImage bmp = new BitmapImage(new Uri(filePath));
+            newImageControl.Source = bmp;
+            newImageControl.Stretch = Stretch.None;
+
+            SetSpritePosition(ref newImageControl);
+            canvasControl.Children.Add(newImageControl);
+            IsCanvasDirty = true;
+
+            mAtlasDoc.AddSprite(
+                (canvasControl.Children.Count - 1).ToString(),
+                ((int)Canvas.GetLeft(newImageControl)).ToString(),
+                ((int)Canvas.GetTop(newImageControl)).ToString(),
+                ((int)newImageControl.Source.Width).ToString(),
+                ((int)newImageControl.Source.Height).ToString());
+            
+        }
+
+        private void  SetSpritePosition(ref Image img)
+        {
+            //assumes auto-resize when time to implement fixed size throw an exception if wolnt fit
+            Image lastImg = null;
+            if(canvasControl.Children.Count != 0)
+            {
+                lastImg = canvasControl.Children[canvasControl.Children.Count - 1] as Image;
+                //lastImg = GetLastImage();
+            }
+            if(lastImg == null)
+            {
+                Canvas.SetLeft(img, 0);
+                Canvas.SetTop(img, 0);
+            }
+            else if(lastImg.Source.Width + Canvas.GetLeft(lastImg) + img.Source.Width > canvasControl.Width)
+            {
+                Canvas.SetLeft(img, 0);
+                //resize canvas height if needed
+                if(lastImg.Source.Height + Canvas.GetTop(lastImg) + img.Source.Height > canvasControl.Height)
+                {
+                    canvasControl.Height = lastImg.Source.Height + Canvas.GetTop(lastImg) + img.Source.Height;
+                }
+                //calculate for highest y here
+                Canvas.SetTop(img, GetHighestYInCanvas());
+            }
+            else
+            {
+                Canvas.SetLeft(img, lastImg.Source.Width + Canvas.GetLeft(lastImg));
+                Canvas.SetTop(img, Canvas.GetTop(lastImg));
+            }
+           
+
+        }
+
+        private double GetHighestYInCanvas()
+        {
+            double result = 0;
+            foreach(Image img in canvasControl.Children)
+            {
+                if(img.Source.Height + Canvas.GetTop(img) > result)
+                {
+                    result = img.Source.Height + Canvas.GetTop(img);
+                }
+            }
+            return result;
+        }
+
+        private Image GetLastImage()
+        {
+            if (canvasControl.Children.Count == 0)
+                return null;
+
+            double highestY = 0;
+            double highestX = 0;
+            //find highest x and y values
+            foreach(Image img in canvasControl.Children)
+            {
+                if(Canvas.GetLeft(img) > highestX)
+                {
+                    highestX = Canvas.GetLeft(img);
+                }
+                if(Canvas.GetTop(img) > highestY)
+                {
+                    highestY = Canvas.GetTop(img);
+                }
+            }
+            foreach(Image img in canvasControl.Children)
+            {
+                if(Canvas.GetLeft(img) == highestX && Canvas.GetTop(img) == highestY)
+                {
+                    return img;
+                }
+            }
+            return null;
+        }
+
+        private void SetCanvasBackground()
+        {
+            ImageBrush brush = new ImageBrush();
+            BitmapImage image = new BitmapImage(new Uri(basePath + "checkerboard_tile.png"));
+            brush.ImageSource = image;
+            brush.TileMode = TileMode.Tile;
+            brush.ViewportUnits = BrushMappingMode.Absolute;
+            brush.Viewport = new Rect(0, 0, 100, 100);
+            brush.Opacity = .5;
+            canvasControl.Background = brush;
+        }
+
+        private void ClearCanvas()
+        {
+            canvasControl.Children.Clear();
+            IsCanvasDirty = false;
+            mAtlasDoc.Clear();
         }
 
     }

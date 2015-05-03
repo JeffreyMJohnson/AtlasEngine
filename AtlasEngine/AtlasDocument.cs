@@ -189,5 +189,11 @@ namespace AtlasEngine
         {
             mDocument.Save(path);
         }
+
+        public void Clear()
+        {
+            //remove all sprite elements from group parent node
+            mRootNode.FirstChild.RemoveAll();
+        }
     }
 }

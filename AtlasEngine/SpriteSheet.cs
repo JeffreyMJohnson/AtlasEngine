@@ -26,10 +26,7 @@ namespace AtlasEngine
         double mWidth = 0;
         double mHeight = 0;
         AtlasDocument mAtlasDoc = new AtlasDocument();
-        //XmlDocument mAtlasDoc = new XmlDocument();
-        //XmlElement mRootNode = null;
         bool mHasChanged = false;//flag for checking if need to remind to save.
-        //XmlElement mGroupsNode;
         MainWindow mWindow = null;
 
         public string BasePath { get; set; }
@@ -147,14 +144,6 @@ namespace AtlasEngine
             HasChanged = false;
 
         }
-
-        //void SetAtlasFileAttribute(string file)
-        //{
-        //    //set filepath attribute on atlas file
-        //    XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
-        //    att.Value = file;
-        //    mRootNode.SetAttributeNode(att);
-        //}
 
 
         string XmlToPngFile(string file)
@@ -370,43 +359,6 @@ namespace AtlasEngine
             }
             return result;
         }
-
-        //private void InitAtlasDoc()
-        //{
-
-        //    mAtlasDoc = new XmlDocument();
-        //    mRootNode = mAtlasDoc.CreateElement("SpriteSheet");
-
-
-        //    XmlAttribute att = mAtlasDoc.CreateAttribute("width");
-        //    att.Value = Width.ToString();
-        //    mRootNode.SetAttributeNode(att);
-
-        //    att = mAtlasDoc.CreateAttribute("height");
-        //    att.Value = Height.ToString();
-        //    mRootNode.SetAttributeNode(att);
-
-        //    att = mAtlasDoc.CreateAttribute("page");
-        //    att.Value = "1";
-        //    mRootNode.SetAttributeNode(att);
-
-        //    //att = mAtlasDoc.CreateAttribute("totalPages");
-        //    //att.Value = mPageCount.ToString();
-        //    //mRootNode.SetAttributeNode(att);
-
-        //    att = mAtlasDoc.CreateAttribute("isNormalized");
-        //    att.Value = mIsNormalized.ToString();
-        //    mRootNode.SetAttributeNode(att);
-
-        //    // mGroupsNode = mAtlasDoc.CreateElement("groups");
-        //    //mRootNode.AppendChild(mGroupsNode);
-
-        //    XmlElement groupNode = mAtlasDoc.CreateElement("group"); ;
-        //    // groupNode.SetAttribute("name", "group0");
-        //    mRootNode.AppendChild(groupNode);
-
-        //    mAtlasDoc.AppendChild(mRootNode);
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
 
