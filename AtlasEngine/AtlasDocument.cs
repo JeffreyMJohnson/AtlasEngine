@@ -28,6 +28,11 @@ namespace AtlasEngine
         }
 
         /*properties*/
+        public XmlDocument XMLDoc
+        {
+            get { return mDocument; }
+        }
+
         public XmlNode RootNode
         {
             get { return mRootNode; }
@@ -125,6 +130,7 @@ namespace AtlasEngine
                     pathAtt = mDocument.CreateAttribute("filePath");
                 }
                 pathAtt.Value = value;
+                mRootNode.Attributes.Append(pathAtt);
             }
         }
 

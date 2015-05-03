@@ -43,7 +43,7 @@ namespace AtlasEngine
             TestIt();
             settingsPanel.DataContext = mSheet;
             XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
-            root.Document = mSheet.AtlasDoc;
+            root.Document = mSheet.AtlasDocument;
         }
 
         /// <summary>
