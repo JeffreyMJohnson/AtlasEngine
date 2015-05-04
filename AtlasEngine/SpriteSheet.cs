@@ -98,7 +98,7 @@ namespace AtlasEngine
             set
             {
                 mAutoResize = value;
-                SwitchSettingsPanelUI();
+                //SwitchSettingsPanelUI();
                 OnPropertyChanged("AutoResize");
             }
         }

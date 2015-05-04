@@ -15,7 +15,7 @@
             </StackPanel>
         </HierarchicalDataTemplate>
 
-        <HierarchicalDataTemplate DataType="group" ItemsSource="{Binding XPath=./*}">
+        <HierarchicalDataTemplate DataType="group" ItemsSource="{Binding XPath=sprite}">
             <TextBlock Text="group"/>
         </HierarchicalDataTemplate>
 
@@ -48,17 +48,17 @@
                 </ScrollViewer>
                 <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" Name="settingsPanel" HorizontalAlignment="Center">
                     <TextBlock Text="Sprite Sheet Settings" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" DataContext="{StaticResource xmlData}">
                         <Label Name="lblWidth" Content="_Width" Target="{Binding ElementName=txtWidthWrite}"/>
                         <Grid>
-                            <TextBlock x:Name="txtWidthReadOnly" Width="Auto" Text="{Binding Width}" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtWidthWrite" Width="Auto" Text="{Binding Width}" Visibility="Hidden" GotFocus="HighlightTextbox"/>
+                            <TextBlock x:Name="txtWidthReadOnly" Width="Auto" Text="{Binding XPath=/SpriteSheet/@width}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtWidthWrite" Width="Auto" Text="{Binding XPath=/SpriteSheet/@width}" Visibility="Hidden" GotFocus="HighlightTextbox"/>
                         </Grid>
                         
                         <Label Name="lblHeight" Content="_Height" Target="{Binding ElementName=txtHeightWrite}"/>
                         <Grid>
-                            <TextBlock x:Name="txtHeightReadOnly" Text="{Binding Path=Height}" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtHeightWrite" Width="Auto" Text="{Binding Path=Height}" Visibility="Hidden" GotFocus="HighlightTextbox"/>
+                            <TextBlock x:Name="txtHeightReadOnly" Text="{Binding XPath=/SpriteSheet/@height}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtHeightWrite" Width="Auto" Text="{Binding XPath=/SpriteSheet/@height}" Visibility="Hidden" GotFocus="HighlightTextbox"/>
                         </Grid>
                         
                         <Label Content="_Auto" Target="{Binding ElementName=chkAutoResize}"/>

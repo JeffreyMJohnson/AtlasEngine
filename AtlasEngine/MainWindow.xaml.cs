@@ -24,6 +24,8 @@ namespace AtlasEngine
         private const uint DEFAULT_SHEET_HEIGHT = 512;
         private AtlasDocument mAtlasDoc = new AtlasDocument(DEFAULT_SHEET_WIDTH.ToString(), DEFAULT_SHEET_HEIGHT.ToString());
         private bool mIsCanvasDirty = false;
+        private bool mAutoResizeCanvas = true;
+
 
         /// <summary>
         /// MainWindow constructor
@@ -31,8 +33,22 @@ namespace AtlasEngine
         public MainWindow()
         {
             InitializeComponent();
-            SetCanvasBackground();
-            IsCanvasDirty = false;
+            //SetCanvasBackground();
+            //IsCanvasDirty = false;
+            chkAutoResize.DataContext = this;
+        }
+
+        public bool AutoResize
+        {
+            get 
+            {
+                return mAutoResizeCanvas;
+            }
+            set
+            {
+                mAutoResizeCanvas = value;
+                SwitchSettingsPanelUI();
+            }
         }
 
         public bool IsCanvasDirty
@@ -302,6 +318,29 @@ namespace AtlasEngine
             canvasControl.Children.Clear();
             IsCanvasDirty = false;
             mAtlasDoc.Clear();
+        }
+
+        private void SwitchSettingsPanelUI()
+        {
+            if (AutoResize)
+            {
+                txtHeightWrite.Visibility = System.Windows.Visibility.Hidden;
+                txtWidthWrite.Visibility = System.Windows.Visibility.Hidden;
+                txtHeightReadOnly.Visibility = System.Windows.Visibility.Visible;
+                txtWidthReadOnly.Visibility = System.Windows.Visibility.Visible;
+
+                lblWidth.Content = "Width";
+                lblHeight.Content = "Height";
+            }
+            else
+            {
+                txtHeightWrite.Visibility = System.Windows.Visibility.Visible;
+                txtWidthWrite.Visibility = System.Windows.Visibility.Visible;
+                txtHeightReadOnly.Visibility = System.Windows.Visibility.Hidden;
+                txtWidthReadOnly.Visibility = System.Windows.Visibility.Hidden;
+                lblWidth.Content = "_Width";
+                lblHeight.Content = "_Height";
+            }
         }
 
     }
