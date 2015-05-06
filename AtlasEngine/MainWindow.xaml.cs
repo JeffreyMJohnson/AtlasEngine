@@ -40,7 +40,8 @@ namespace AtlasEngine
         /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            TestIt();
+            //TestIt();
+            mSheet = new SpriteSheet(this, basePath, 256, 256, false);
             settingsPanel.DataContext = mSheet;
             XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
             root.Document = mSheet.AtlasDocument;

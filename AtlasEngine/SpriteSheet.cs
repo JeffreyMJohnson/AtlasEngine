@@ -70,7 +70,7 @@ namespace AtlasEngine
             get { return mWidth; }
             set
             {
-                mWidth = value;
+                mWidth = (double)((int)value);
                 mAtlasDoc.SheetWidth = mWidth.ToString();
                 if (mWindow != null)
                 {
@@ -85,7 +85,7 @@ namespace AtlasEngine
             get { return mHeight; }
             set
             {
-                mHeight = value;
+                mHeight = (double)((int)value);
                 mAtlasDoc.SheetHeight = mHeight.ToString();
                 if (mWindow != null)
                 {
@@ -187,6 +187,7 @@ namespace AtlasEngine
             //add the sprites to the bitmap
             foreach (Image2 img in mSpritesList)
             {
+                //
                 System.Windows.Rect imageRect = new System.Windows.Rect(img.Left, img.Top, img.Width, img.Height);
                 WriteableBitmap wBmp = new WriteableBitmap(BitmapFactory.ConvertToPbgra32Format(img.mBMP));
                 finalImage.Blit(imageRect, wBmp, new System.Windows.Rect(0, 0, wBmp.PixelWidth, wBmp.PixelHeight));
@@ -244,31 +245,6 @@ namespace AtlasEngine
                 ((int)img.Width).ToString(),
                 ((int)img.Height).ToString());
 
-            ////build xml
-            //XmlElement spriteNode = mAtlasDoc.CreateElement("sprite");
-            //XmlAttribute att = mAtlasDoc.CreateAttribute("id");
-            //att.Value = img.ID.ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            //att = mAtlasDoc.CreateAttribute("x");
-            //att.Value = ((int)img.Left).ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            //att = mAtlasDoc.CreateAttribute("y");
-            //att.Value = ((int)img.Top).ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            //att = mAtlasDoc.CreateAttribute("width");
-            //att.Value = ((int)img.Width).ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            //att = mAtlasDoc.CreateAttribute("height");
-            //att.Value = ((int)img.Height).ToString();
-            //spriteNode.SetAttributeNode(att);
-
-            ////append to group node
-            //mRootNode.FirstChild.AppendChild(spriteNode);
-
 
         }
 
@@ -285,7 +261,7 @@ namespace AtlasEngine
 
         private MessageBoxResult PopNotEnoughRoom()
         {
-            return MessageBox.Show("Your sheet is too small to add this image. Would you like to resize automatically?", "Not enoughr room.", MessageBoxButton.YesNo);
+            return MessageBox.Show("Your sheet is too small to add this image. Would you like to resize automatically?", "Not enough room.", MessageBoxButton.YesNo);
 
         }
 
