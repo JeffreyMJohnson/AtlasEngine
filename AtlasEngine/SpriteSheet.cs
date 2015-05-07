@@ -17,8 +17,8 @@ namespace AtlasEngine
     public class SpriteSheet : INotifyPropertyChanged
     {
         //MAGIC NUMBERS
-        const int DEFAULT_IMAGE_WIDTH = 256;
-        const int DEFAULT_IMAGE_HEIGHT = 256;
+        int DEFAULT_IMAGE_WIDTH = 256;
+        int DEFAULT_IMAGE_HEIGHT = 256;
 
         List<Image2> mSpritesList = new List<Image2>();
         bool mIsNormalized = false;
@@ -113,8 +113,8 @@ namespace AtlasEngine
 
         public SpriteSheet()
         {
-            Width = 0;
-            Height = 0;
+            Width = DEFAULT_IMAGE_WIDTH;
+            Height = DEFAULT_IMAGE_HEIGHT;
         }
 
         public SpriteSheet(double width, double height)
@@ -256,13 +256,11 @@ namespace AtlasEngine
             mSpritesList.Clear();
             mAtlasDoc = new AtlasDocument(Width.ToString(), Height.ToString());
             HasChanged = false;
-
         }
 
         private MessageBoxResult PopNotEnoughRoom()
         {
             return MessageBox.Show("Your sheet is too small to add this image. Would you like to resize automatically?", "Not enough room.", MessageBoxButton.YesNo);
-
         }
 
         private void SwitchSettingsPanelUI()
@@ -288,7 +286,12 @@ namespace AtlasEngine
             }
         }
 
-        bool GetNextImagePosition(Image2 newImage)
+        /// <summary>
+        /// Sets the Top and Left position of given Image2 object if enough room, or AutoResize property is true.
+        /// </summary>
+        /// <param name="newImage"></param>
+        /// <returns>Returns true if AutoResize property is true or AutoResize property is false and given Image2 object will fit in canvas.</returns>
+        private bool GetNextImagePosition(Image2 newImage)
         {
             //position will be default values 0,0
             if (mSpritesList.Count == 0)
@@ -370,7 +373,11 @@ namespace AtlasEngine
             return true;
         }
 
-        double GetHighestYInRow()
+        /// <summary>
+        /// Returns the highest Y value of the bottom of images on canvas.
+        /// </summary>
+        /// <returns></returns>
+        private double GetHighestYInRow()
         {
             double result = 0;
             foreach (Image2 img in mSpritesList)
@@ -379,43 +386,6 @@ namespace AtlasEngine
             }
             return result;
         }
-
-        //private void InitAtlasDoc()
-        //{
-
-        //    mAtlasDoc = new XmlDocument();
-        //    mRootNode = mAtlasDoc.CreateElement("SpriteSheet");
-
-
-        //    XmlAttribute att = mAtlasDoc.CreateAttribute("width");
-        //    att.Value = Width.ToString();
-        //    mRootNode.SetAttributeNode(att);
-
-        //    att = mAtlasDoc.CreateAttribute("height");
-        //    att.Value = Height.ToString();
-        //    mRootNode.SetAttributeNode(att);
-
-        //    att = mAtlasDoc.CreateAttribute("page");
-        //    att.Value = "1";
-        //    mRootNode.SetAttributeNode(att);
-
-        //    //att = mAtlasDoc.CreateAttribute("totalPages");
-        //    //att.Value = mPageCount.ToString();
-        //    //mRootNode.SetAttributeNode(att);
-
-        //    att = mAtlasDoc.CreateAttribute("isNormalized");
-        //    att.Value = mIsNormalized.ToString();
-        //    mRootNode.SetAttributeNode(att);
-
-        //    // mGroupsNode = mAtlasDoc.CreateElement("groups");
-        //    //mRootNode.AppendChild(mGroupsNode);
-
-        //    XmlElement groupNode = mAtlasDoc.CreateElement("group"); ;
-        //    // groupNode.SetAttribute("name", "group0");
-        //    mRootNode.AppendChild(groupNode);
-
-        //    mAtlasDoc.AppendChild(mRootNode);
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
 
