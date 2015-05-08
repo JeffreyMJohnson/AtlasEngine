@@ -26,7 +26,10 @@ namespace AtlasEngine
         double mWidth = 0;
         double mHeight = 0;
         AtlasDocument mAtlasDoc = new AtlasDocument();
+        //XmlDocument mAtlasDoc = new XmlDocument();
+        //XmlElement mRootNode = null;
         bool mHasChanged = false;//flag for checking if need to remind to save.
+        //XmlElement mGroupsNode;
         MainWindow mWindow = null;
 
         public string BasePath { get; set; }
@@ -67,7 +70,7 @@ namespace AtlasEngine
             get { return mWidth; }
             set
             {
-                mWidth = value;
+                mWidth = (double)((int)value);
                 mAtlasDoc.SheetWidth = mWidth.ToString();
                 if (mWindow != null)
                 {
@@ -82,7 +85,7 @@ namespace AtlasEngine
             get { return mHeight; }
             set
             {
-                mHeight = value;
+                mHeight = (double)((int)value);
                 mAtlasDoc.SheetHeight = mHeight.ToString();
                 if (mWindow != null)
                 {
@@ -98,7 +101,7 @@ namespace AtlasEngine
             set
             {
                 mAutoResize = value;
-                //SwitchSettingsPanelUI();
+                SwitchSettingsPanelUI();
                 OnPropertyChanged("AutoResize");
             }
         }
@@ -145,6 +148,14 @@ namespace AtlasEngine
 
         }
 
+        //void SetAtlasFileAttribute(string file)
+        //{
+        //    //set filepath attribute on atlas file
+        //    XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
+        //    att.Value = file;
+        //    mRootNode.SetAttributeNode(att);
+        //}
+
 
         string XmlToPngFile(string file)
         {
@@ -160,6 +171,13 @@ namespace AtlasEngine
             file = filePath.Substring(whackIndex + 1, filePath.Length - (whackIndex + 1));
         }
 
+
+        //void SaveAtlasFile(string path, string file)
+        //{
+        //    //save atlas file
+        //    mAtlasDoc.Save(path + file);
+        //}
+
         void SaveImageFile(string filePath)
         {
 
@@ -169,6 +187,7 @@ namespace AtlasEngine
             //add the sprites to the bitmap
             foreach (Image2 img in mSpritesList)
             {
+                //
                 System.Windows.Rect imageRect = new System.Windows.Rect(img.Left, img.Top, img.Width, img.Height);
                 WriteableBitmap wBmp = new WriteableBitmap(BitmapFactory.ConvertToPbgra32Format(img.mBMP));
                 finalImage.Blit(imageRect, wBmp, new System.Windows.Rect(0, 0, wBmp.PixelWidth, wBmp.PixelHeight));
@@ -214,7 +233,6 @@ namespace AtlasEngine
                     return;
                 }
             }
-
             mWindow.canvasControl.Children.Add(img.ImageControl);
             HasChanged = true;
 
@@ -226,6 +244,8 @@ namespace AtlasEngine
                 ((int)img.Top).ToString(),
                 ((int)img.Width).ToString(),
                 ((int)img.Height).ToString());
+
+
         }
 
         public void Clear()
@@ -241,7 +261,7 @@ namespace AtlasEngine
 
         private MessageBoxResult PopNotEnoughRoom()
         {
-            return MessageBox.Show("Your sheet is too small to add this image. Would you like to resize automatically?", "Not enoughr room.", MessageBoxButton.YesNo);
+            return MessageBox.Show("Your sheet is too small to add this image. Would you like to resize automatically?", "Not enough room.", MessageBoxButton.YesNo);
 
         }
 
@@ -359,6 +379,43 @@ namespace AtlasEngine
             }
             return result;
         }
+
+        //private void InitAtlasDoc()
+        //{
+
+        //    mAtlasDoc = new XmlDocument();
+        //    mRootNode = mAtlasDoc.CreateElement("SpriteSheet");
+
+
+        //    XmlAttribute att = mAtlasDoc.CreateAttribute("width");
+        //    att.Value = Width.ToString();
+        //    mRootNode.SetAttributeNode(att);
+
+        //    att = mAtlasDoc.CreateAttribute("height");
+        //    att.Value = Height.ToString();
+        //    mRootNode.SetAttributeNode(att);
+
+        //    att = mAtlasDoc.CreateAttribute("page");
+        //    att.Value = "1";
+        //    mRootNode.SetAttributeNode(att);
+
+        //    //att = mAtlasDoc.CreateAttribute("totalPages");
+        //    //att.Value = mPageCount.ToString();
+        //    //mRootNode.SetAttributeNode(att);
+
+        //    att = mAtlasDoc.CreateAttribute("isNormalized");
+        //    att.Value = mIsNormalized.ToString();
+        //    mRootNode.SetAttributeNode(att);
+
+        //    // mGroupsNode = mAtlasDoc.CreateElement("groups");
+        //    //mRootNode.AppendChild(mGroupsNode);
+
+        //    XmlElement groupNode = mAtlasDoc.CreateElement("group"); ;
+        //    // groupNode.SetAttribute("name", "group0");
+        //    mRootNode.AppendChild(groupNode);
+
+        //    mAtlasDoc.AppendChild(mRootNode);
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
 

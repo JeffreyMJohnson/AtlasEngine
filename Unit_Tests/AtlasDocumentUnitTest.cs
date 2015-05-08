@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AtlasEngine;
 using System.Xml;
-using System.IO;
-
 
 namespace Unit_Tests
 {
@@ -15,6 +13,7 @@ namespace Unit_Tests
     [TestClass]
     public class AtlasDocumentUnitTest
     {
+        PrivateObject mAtlasDocClass;
         AtlasDocument mAtlasDoc;
 
         #region Additional test attributes
@@ -42,13 +41,14 @@ namespace Unit_Tests
         [TestInitialize]
         public void TestInit()
         {
-           mAtlasDoc = new AtlasDocument();
+            mAtlasDoc = new AtlasDocument();
+            
         }
 
         [TestMethod]
         public void ConstructorTest()
         {
-            //verify document and root are not null
+           //verify document and root are not null
             XmlDocument doc = mAtlasDoc.XMLDoc;
             Assert.IsNotNull(doc);
             Assert.IsNotNull(mAtlasDoc.RootNode);
@@ -60,9 +60,9 @@ namespace Unit_Tests
         [TestMethod]
         public void ConstructorTest_Overload()
         {
-            mAtlasDoc = new AtlasDocument("500", "500");
+            mAtlasDoc = new AtlasDocument("500","500");
             //verify document and root are not null
-           XmlDocument doc = mAtlasDoc.XMLDoc;
+            XmlDocument doc = mAtlasDoc.XMLDoc;
             Assert.IsNotNull(doc);
             Assert.IsNotNull(mAtlasDoc.RootNode);
 
@@ -95,7 +95,6 @@ namespace Unit_Tests
             mAtlasDoc.SheetWidth = "100";
             mAtlasDoc.SheetWidth = "200";
 
-
             //check variable
             Assert.AreEqual("200", mAtlasDoc.SheetWidth);
 
@@ -110,7 +109,7 @@ namespace Unit_Tests
         [TestMethod]
         public void HeightPropTest_NotSet()
         {
-           string result = mAtlasDoc.SheetHeight;
+            string result = mAtlasDoc.SheetHeight;
             Assert.AreEqual("", result);
 
             mAtlasDoc.SheetHeight = "100";
@@ -230,7 +229,7 @@ namespace Unit_Tests
             Assert.AreEqual("500", GetRootNodeAttribute(savedFile, "width"));
             Assert.AreEqual("200", GetRootNodeAttribute(savedFile, "height"));
             Assert.AreEqual("SavedDocTest.png", GetRootNodeAttribute(savedFile, "filePath"));
-            
+
             //verify 3 sprite nodes
             Assert.AreEqual(3, savedFile.FirstChild.FirstChild.ChildNodes.Count);
 
