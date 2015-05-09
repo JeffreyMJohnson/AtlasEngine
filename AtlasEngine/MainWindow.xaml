@@ -30,11 +30,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding ElementName=gridMain, Path=ActualWidth}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Name="menu">
-            <MenuItem Header="_File" Name="menuItemFile">
-                <MenuItem Header="_New Sprite Sheet" Click="HandleNewSpriteSheetClick"/>
-                <MenuItem Header="_Save Sprite Sheet" Click="HandleSaveSheetClick"/>
-                <MenuItem Header="_Load Sprite(s)" Click="HandleMenuFileSelectClick" ToolTip="Select sprite image files to add to sheet."/>
-                <MenuItem Header="E_xit Program" Click="HandleMenuExitClick" />
+            <MenuItem Header="_File" x:Name="menuItemFile">
+                <MenuItem Header="_New Sprite Sheet" x:Name="menuItemNewSheet" Click="HandleNewSpriteSheetClick"/>
+                <MenuItem Header="_Save Sprite Sheet" x:Name="menuItemSaveSheet" Click="HandleSaveSheetClick"/>
+                <MenuItem Header="_Load Sprite(s)" x:Name="menuItemLoadImage" Click="HandleMenuFileSelectClick" ToolTip="Select sprite image files to add to sheet."/>
+                <MenuItem Header="E_xit Program" x:Name="menuItemExitProgram" Click="HandleMenuExitClick" />
             </MenuItem>
         </Menu>
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="0">

@@ -2,62 +2,84 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AtlasEngine;
 using System.Xml;
+using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace Unit_Tests
 {
     [TestClass]
     public class SpriteSheetTest
     {
-        PrivateObject sheet;
+        PrivateObject mSheetClass;
+        SpriteSheet mSheet;
+
 
         [TestInitialize]
         public void TestInit()
         {
-            sheet = new PrivateObject(typeof(SpriteSheet));
+            mSheetClass = new PrivateObject(typeof(SpriteSheet));
+            mSheet = new SpriteSheet();
         }
 
-        //refactored to AtlasDocument class, will need this moved to it's test class when made
-        //[TestMethod]
-        //public void InitAtlasTest()
-        //{
-           
-        //    sheet.SetProperty("Width", 100);
-        //    sheet.SetProperty("Height", 100);
-        //    sheet.Invoke("InitAtlasDoc");
+        [TestMethod]
+        public void HasChangedProperty()
+        {
+            //check default setting is false
+            Assert.AreEqual(false, mSheet.HasChanged);
 
+            mSheet.HasChanged = true;
+            Assert.AreEqual(true, mSheet.HasChanged);
 
-        //    XmlDocument xmlDoc = sheet.GetProperty("AtlasDoc") as XmlDocument;
+            mSheet.HasChanged = false;
+            Assert.AreEqual(false, mSheet.HasChanged);
+        }
 
-        //    //verify rootnode
-        //    XmlNode root = xmlDoc.FirstChild;
-        //    Assert.AreEqual("SpriteSheet", root.Name);
+        [TestMethod]
+        public void WidthProperty()
+        {
+            int defaultWidth = (int)mSheetClass.GetField("DEFAULT_IMAGE_WIDTH");
 
+            //verfiy default width
+            Assert.AreEqual(defaultWidth, mSheet.Width);
+            mSheet.Width = 512;
 
-        //    //verify attributes
-        //    XmlAttributeCollection attributes = root.Attributes;
-        //    Assert.AreEqual(4, attributes.Count);
+            Assert.AreEqual(512, mSheet.Width);
+        }
 
-        //    //width
-        //    XmlAttribute att = attributes.GetNamedItem("width") as XmlAttribute;
-        //    Assert.IsNotNull(att);
-        //    Assert.AreEqual("100", att.Value);
+        [TestMethod]
+        public void HeightProperty()
+        {
+            int defaultWidth = (int)mSheetClass.GetField("DEFAULT_IMAGE_HEIGHT");
 
-        //    //height
-        //    att = attributes.GetNamedItem("height") as XmlAttribute;
-        //    Assert.IsNotNull(att);
-        //    Assert.AreEqual("100", att.Value);
+            //verfiy default width
+            Assert.AreEqual(defaultWidth, mSheet.Height);
+            mSheet.Height = 512;
 
-        //    //verify single group child of root
+            Assert.AreEqual(512, mSheet.Height);
+        }
 
-        //}
+        [TestMethod]
+        public void AutoResizeProperty()
+        {
+            //verify set get
+            Assert.AreEqual(false, mSheet.AutoResize);
+
+            
+            //setting causes coupled WPF stuff so can't unit test
+            //mSheet.AutoResize = true;
+            //Assert.AreEqual(true, mSheet.AutoResize);
+
+            //mSheet.AutoResize = false;
+            //Assert.AreEqual(false, mSheet.AutoResize);
+        }
 
         [TestMethod]
         public void FileExtensionConvertTest()
         {
-            string result = sheet.Invoke("XmlToPngFile", "ABC.XYZ") as string;
+            string result = mSheetClass.Invoke("XmlToPngFile", "ABC.XYZ") as string;
             Assert.AreEqual("ABC.png", result);
 
-            result = sheet.Invoke("XmlToPngFile", @"Foo\ABC.XYZ") as string;
+            result = mSheetClass.Invoke("XmlToPngFile", @"Foo\ABC.XYZ") as string;
             Assert.AreEqual(@"Foo\ABC.png", result);
 
         }
@@ -65,25 +87,11 @@ namespace Unit_Tests
         [TestMethod]
         public void PathParseTest()
         {
-            string filePath =  @"ABC\DEF\GHI.XYZ";
-           Object[] args = new Object[] {filePath, "", ""};
-            sheet.Invoke("ParseFilePath", args);
+            string filePath = @"ABC\DEF\GHI.XYZ";
+            Object[] args = new Object[] { filePath, "", "" };
+            mSheetClass.Invoke("ParseFilePath", args);
             Assert.AreEqual(@"ABC\DEF\", args[1]);
             Assert.AreEqual("GHI.XYZ", args[2]);
         }
-
-        /*refactored to AtlasDocument class, need to move this to it's test class when made
-        [TestMethod]
-        public void SetAtlasFileAttributeTest()
-        {
-            sheet.Invoke("InitAtlasDoc");
-            string testPath = @"TestFilePath.png";
-            sheet.Invoke("SetAtlasFileAttribute", testPath);
-            XmlDocument atlasDoc = sheet.GetProperty("AtlasDoc") as XmlDocument;
-            XmlNode result = atlasDoc.FirstChild.Attributes.GetNamedItem("filePath");
-            Assert.AreEqual(testPath, result.Value);
-        }
-         */
-
     }
 }
