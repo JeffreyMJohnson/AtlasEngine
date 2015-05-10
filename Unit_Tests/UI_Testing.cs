@@ -152,7 +152,13 @@ namespace Unit_Tests
             ClickFileMenuItem();
             AutomationElement fileNewMenuItem = GetElement("menuItemNewSheet");
 
+            //verify no popup 
+            //check for pop up window
+            AutomationElement popUp = mainWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, "Are You Sure?"));
+            Assert.IsNull(popUp);
+
             //verify
+            VerifyDefaultSettings();
             
 
         }
@@ -187,6 +193,13 @@ namespace Unit_Tests
             btnPattern.Invoke();
 
             //verify default settings
+            VerifyDefaultSettings();
+
+
+        }
+
+        private void VerifyDefaultSettings()
+        {
             AutomationElement txtWidthReadOnly = GetElement("txtWidthReadOnly");
             AutomationElement txtWidthWrite = GetElement("txtWidthWrite");
             AutomationElement txtHeightReadOnly = GetElement("txtHeightReadOnly");
@@ -210,8 +223,6 @@ namespace Unit_Tests
 
             Assert.AreEqual(DEFAULT_WIDTH, width);
             Assert.AreEqual(DEFAULT_HEIGHT, height);
-
-
         }
 
         private void LoadImage(string path, string imageFile)
