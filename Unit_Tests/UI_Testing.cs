@@ -181,8 +181,17 @@ namespace Unit_Tests
             //mainWindow = desktop.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.NameProperty, "Atlas Engine"));
             //Assert.IsNotNull(mainWindow);
 
-            //check for pop up window
-            AutomationElement popUp = mainWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, "Are You Sure?"));
+            //check for pop up window\
+            AutomationElement popUp = null;
+            int cnt = 0;
+            do
+            {
+                Console.WriteLine("Looking for popup window...");
+                popUp = mainWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, "Are You Sure?"));
+                cnt++;
+                Thread.Sleep(100);
+            } while (null == popUp && cnt < 50);
+            
             Assert.IsNotNull(popUp);
 
             //click yes button

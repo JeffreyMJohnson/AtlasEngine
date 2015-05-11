@@ -189,5 +189,15 @@ namespace AtlasEngine
         {
             mDocument.Save(path);
         }
+
+        public void Clear()
+        {
+            XmlNode groupNode = RootNode.FirstChild;
+            if (null != groupNode)
+            {
+                groupNode.RemoveAll();
+            }
+            
+        }
     }
 }

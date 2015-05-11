@@ -254,7 +254,8 @@ namespace AtlasEngine
             Width = DEFAULT_IMAGE_WIDTH;
             Height = DEFAULT_IMAGE_HEIGHT;
             mSpritesList.Clear();
-            mAtlasDoc = new AtlasDocument(Width.ToString(), Height.ToString());
+            mAtlasDoc.Clear();
+            //mAtlasDoc = new AtlasDocument(Width.ToString(), Height.ToString());
             HasChanged = false;
         }
 

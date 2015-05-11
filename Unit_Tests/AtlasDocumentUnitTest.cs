@@ -257,6 +257,23 @@ namespace Unit_Tests
 
         }
 
+        [TestMethod]
+        public void ClearAtlasTest()
+        {
+            mAtlasDoc = new AtlasDocument("500", "500");
+            //add some sprite elems
+            mAtlasDoc.AddSprite("0", "0", "0", "100", "100");
+            mAtlasDoc.AddSprite("1", "0", "100", "100", "100");
+            mAtlasDoc.AddSprite("2", "0", "200", "100", "100");
+
+            //call clear
+            mAtlasDoc.Clear();
+            //verify group has no children
+            XmlNode groupNode = mAtlasDoc.RootNode.FirstChild;
+            Assert.AreEqual(0, groupNode.ChildNodes.Count);
+
+        }
+
         private string GetRootNodeAttribute(XmlDocument doc, string attributeName)
         {
             XmlNode rootNode = doc.FirstChild;
