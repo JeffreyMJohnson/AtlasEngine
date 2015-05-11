@@ -123,7 +123,7 @@ namespace AtlasEngine
             }
         }
 
-        void InitControl()
+        private void InitControl()
         {
             mControl = new Image();
             mControl.Source = mBMP;

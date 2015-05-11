@@ -14,36 +14,41 @@ using System.Windows;
 
 namespace AtlasEngine
 {
+    /// <summary>
+    /// Class representing sprite sheet.
+    /// </summary>
     public class SpriteSheet : INotifyPropertyChanged
     {
         //MAGIC NUMBERS
         int DEFAULT_IMAGE_WIDTH = 256;
         int DEFAULT_IMAGE_HEIGHT = 256;
 
+        public event PropertyChangedEventHandler PropertyChanged;
         List<Image2> mSpritesList = new List<Image2>();
         bool mIsNormalized = false;
         bool mAutoResize = false;
         double mWidth = 0;
         double mHeight = 0;
         AtlasDocument mAtlasDoc = new AtlasDocument();
-        //XmlDocument mAtlasDoc = new XmlDocument();
-        //XmlElement mRootNode = null;
         bool mHasChanged = false;//flag for checking if need to remind to save.
-        //XmlElement mGroupsNode;
         MainWindow mWindow = null;
 
+        /// <summary>
+        /// Returns and sets the path and file to the sprite sheet.
+        /// </summary>
         public string BasePath { get; set; }
 
+        /// <summary>
+        /// Sets the MainWindow property of the sprite sheet.
+        /// </summary>
         public MainWindow Window
         {
             set { mWindow = value; }
         }
 
-        //public XmlDocument AtlasDoc
-        //{
-        //    get { return mAtlasDoc; }
-        //}
-
+        /// <summary>
+        /// Sets and returns the HasChanged property.
+        /// </summary>
         public bool HasChanged
         {
             get { return mHasChanged; }
@@ -65,6 +70,9 @@ namespace AtlasEngine
             }
         }
 
+        /// <summary>
+        /// Sets and returns the width of the sprite sheet.
+        /// </summary>
         public double Width
         {
             get { return mWidth; }
@@ -80,6 +88,10 @@ namespace AtlasEngine
             }
         }
 
+
+        /// <summary>
+        /// Set the height of the sprite sheet.
+        /// </summary>
         public double Height
         {
             get { return mHeight; }
@@ -95,6 +107,9 @@ namespace AtlasEngine
             }
         }
 
+        /// <summary>
+        /// Sets and returns wether or not the sprite sheet sets it's width and height automatically.
+        /// </summary>
         public bool AutoResize
         {
             get { return mAutoResize; }
@@ -106,23 +121,45 @@ namespace AtlasEngine
             }
         }
 
+        /// <summary>
+        /// Returns the xMLDocument of this sprite sheet.\n
+        /// *NOTE: this property is read-only.*
+        /// </summary>
         public XmlDocument AtlasDocument
         {
             get { return mAtlasDoc.XMLDoc; }
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public SpriteSheet()
         {
             Width = DEFAULT_IMAGE_WIDTH;
             Height = DEFAULT_IMAGE_HEIGHT;
         }
 
+        /// <summary>
+        /// Overloaded constructor.\n
+        /// *note:used for testing. Should use SpriteSheet(width, height) for production.
+        /// </summary>
+        /// <param name="width">Width of the sprite sheet.</param>
+        /// <param name="height">Height of the sprite sheet.</param
         public SpriteSheet(double width, double height)
         {
             Width = width;
             Height = height;
         }
 
+        /// <summary>
+        /// Overloaded spritesheet\n
+        /// *note:This is the constructor to use for production.*
+        /// </summary>
+        /// <param name="window">Handle to the MainWindow of the application.</param>
+        /// <param name="basePath">Base path of this project.</param>
+        /// <param name="width">Width of the sprite sheet.</param>
+        /// <param name="height"><Height of the sprite sheet./param>
+        /// <param name="normalize">*NOT USED, RESERVED FOR FUTURE USE.*</param>
         public SpriteSheet(MainWindow window, string basePath, double width, double height, bool normalize)
         {
             mWindow = window;
@@ -133,6 +170,10 @@ namespace AtlasEngine
             AutoResize = false;
         }
 
+        /// <summary>
+        /// Save the sprite sheet and the atlas map file(XML).
+        /// </summary>
+        /// <param name="filePath">Path and file name of the atlas map file (XML).</param>
         public void Save(string filePath)
         {
             //build image file name
@@ -148,37 +189,70 @@ namespace AtlasEngine
 
         }
 
-        //void SetAtlasFileAttribute(string file)
-        //{
-        //    //set filepath attribute on atlas file
-        //    XmlAttribute att = mAtlasDoc.CreateAttribute("filePath");
-        //    att.Value = file;
-        //    mRootNode.SetAttributeNode(att);
-        //}
+        /// <summary>
+        /// Add a sprite image to the sprite sheet.
+        /// </summary>
+        /// <param name="path">File path and name of image to load.</param>
+        public void AddSprite(string path)
+        {
+            Image2 img = new Image2(path, mSpritesList.Count);
+            //getnextimage will return a bool representing if there is room for new image.
+            if (!GetNextImagePosition(img))
+            {
+                if (PopNotEnoughRoom() == MessageBoxResult.Yes)
+                {
+                    //set to auto resize
+                    AutoResize = true;
+                    GetNextImagePosition(img);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            mWindow.canvasControl.Children.Add(img.ImageControl);
+            HasChanged = true;
+
+            mSpritesList.Add(img);
+
+            mAtlasDoc.AddSprite(
+                img.ID.ToString(),
+                ((int)img.Left).ToString(),
+                ((int)img.Top).ToString(),
+                ((int)img.Width).ToString(),
+                ((int)img.Height).ToString());
 
 
-        string XmlToPngFile(string file)
+        }
+
+        /// <summary>
+        /// Clears all previously loaded sprites and sets the sheet to default settings.
+        /// </summary>
+        public void Clear()
+        {
+            mWindow.canvasControl.Children.RemoveRange(0, mWindow.canvasControl.Children.Count);
+            Width = DEFAULT_IMAGE_WIDTH;
+            Height = DEFAULT_IMAGE_HEIGHT;
+            mSpritesList.Clear();
+            mAtlasDoc.Clear();
+            HasChanged = false;
+        }
+
+        private string XmlToPngFile(string file)
         {
             int dotIndex = file.LastIndexOf('.');
             //substring file without extension and concatenate .png to it.
             return file.Substring(0, dotIndex) + ".png";
         }
 
-        void ParseFilePath(string filePath, out string path, out string file)
+        private void ParseFilePath(string filePath, out string path, out string file)
         {
             int whackIndex = filePath.LastIndexOf('\\');
             path = filePath.Substring(0, whackIndex + 1);
             file = filePath.Substring(whackIndex + 1, filePath.Length - (whackIndex + 1));
         }
 
-
-        //void SaveAtlasFile(string path, string file)
-        //{
-        //    //save atlas file
-        //    mAtlasDoc.Save(path + file);
-        //}
-
-        void SaveImageFile(string filePath)
+        private void SaveImageFile(string filePath)
         {
 
             //create bitmap to hold sprites
@@ -215,50 +289,6 @@ namespace AtlasEngine
             }
         }
 
-
-        public void AddSprite(string path)
-        {
-            Image2 img = new Image2(path, mSpritesList.Count);
-            //getnextimage will return a bool representing if there is room for new image.
-            if (!GetNextImagePosition(img))
-            {
-                if (PopNotEnoughRoom() == MessageBoxResult.Yes)
-                {
-                    //set to auto resize
-                    AutoResize = true;
-                    GetNextImagePosition(img);
-                }
-                else
-                {
-                    return;
-                }
-            }
-            mWindow.canvasControl.Children.Add(img.ImageControl);
-            HasChanged = true;
-
-            mSpritesList.Add(img);
-
-            mAtlasDoc.AddSprite(
-                img.ID.ToString(),
-                ((int)img.Left).ToString(),
-                ((int)img.Top).ToString(),
-                ((int)img.Width).ToString(),
-                ((int)img.Height).ToString());
-
-
-        }
-
-        public void Clear()
-        {
-            mWindow.canvasControl.Children.RemoveRange(0, mWindow.canvasControl.Children.Count);
-            Width = DEFAULT_IMAGE_WIDTH;
-            Height = DEFAULT_IMAGE_HEIGHT;
-            mSpritesList.Clear();
-            mAtlasDoc.Clear();
-            //mAtlasDoc = new AtlasDocument(Width.ToString(), Height.ToString());
-            HasChanged = false;
-        }
-
         private MessageBoxResult PopNotEnoughRoom()
         {
             return MessageBox.Show("Your sheet is too small to add this image. Would you like to resize automatically?", "Not enough room.", MessageBoxButton.YesNo);
@@ -287,11 +317,6 @@ namespace AtlasEngine
             }
         }
 
-        /// <summary>
-        /// Sets the Top and Left position of given Image2 object if enough room, or AutoResize property is true.
-        /// </summary>
-        /// <param name="newImage"></param>
-        /// <returns>Returns true if AutoResize property is true or AutoResize property is false and given Image2 object will fit in canvas.</returns>
         private bool GetNextImagePosition(Image2 newImage)
         {
             //position will be default values 0,0
@@ -374,10 +399,6 @@ namespace AtlasEngine
             return true;
         }
 
-        /// <summary>
-        /// Returns the highest Y value of the bottom of images on canvas.
-        /// </summary>
-        /// <returns></returns>
         private double GetHighestYInRow()
         {
             double result = 0;
@@ -388,7 +409,7 @@ namespace AtlasEngine
             return result;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        
 
         private void OnPropertyChanged(string info)
         {
