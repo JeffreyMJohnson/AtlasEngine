@@ -77,6 +77,10 @@ namespace AtlasEngine
                     mSheet.Clear();
                 }
             }
+            else
+            {
+                mSheet.Clear();
+            }
 
         }
 
