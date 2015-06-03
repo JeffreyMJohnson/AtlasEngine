@@ -1,8 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using AtlasEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AtlasEngine;
+using System;
 using System.Xml;
 
 namespace Unit_Tests

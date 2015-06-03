@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Windows.Automation;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows.Automation;
 
 namespace Unit_Tests
 {

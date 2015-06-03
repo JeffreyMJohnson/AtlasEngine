@@ -1,9 +1,6 @@
-﻿using System;
+﻿using AtlasEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AtlasEngine;
-using System.Xml;
-using System.Windows.Media;
-using System.Windows.Controls;
+using System;
 
 namespace Unit_Tests
 {

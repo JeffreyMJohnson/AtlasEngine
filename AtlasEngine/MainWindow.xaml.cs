@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
+using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace AtlasEngine
 {
@@ -45,23 +45,6 @@ namespace AtlasEngine
             settingsPanel.DataContext = mSheet;
             XmlDataProvider root = FindResource("xmlData") as XmlDataProvider;
             root.Document = mSheet.AtlasDocument;
-        }
-
-        /// <summary>
-        ///TODO: DEBUG USE ONLY, THIS SHOULD NOT BE HERE FOR RELEASE
-        /// </summary>
-        void TestIt()
-        {
-            mSheet = new SpriteSheet(this, basePath, 256, 256, false);
-            for (int i = 0; i < 10; i++)
-            {
-                mSheet.AddSprite(basePath + @"test_images\med\green_square_med.png");
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                mSheet.AddSprite(basePath + @"test_images\small\eight_ball_small.png");
-            }
         }
 
         /// <summary>

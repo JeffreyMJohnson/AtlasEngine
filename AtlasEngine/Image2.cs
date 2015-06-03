@@ -7,6 +7,9 @@ using System.Windows.Shapes;
 
 namespace AtlasEngine
 {
+    /// <summary>
+    /// Wrapper class to hold all the different objects and data for the canvas
+    /// </summary>
     class Image2
     {
         string mFilePath;
