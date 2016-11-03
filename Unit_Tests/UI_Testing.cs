@@ -11,7 +11,7 @@ namespace Unit_Tests
     {
         private int DEFAULT_WIDTH = 256;
         private int DEFAULT_HEIGHT = 256;
-        private string PROJECT_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\GitHub\AtlasEngine\AtlasEngine\";
+        private string PROJECT_PATH = @"..\..\..\AtlasEngine\";
         private Process programProcess = null;
         private AutomationElement desktop = null;
         private AutomationElement mainWindow = null;
